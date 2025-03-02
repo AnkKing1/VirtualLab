@@ -1,17 +1,19 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Landing_Navbar from "./components/Landing_Navbar"; // Adjust the path as necessary
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Resources from "./pages/Resources";
+import Home from "./pages/LandingPages/Home";
+import About from "./pages/LandingPages/About";
+import Landing_Navbar from "./components/LandingComponent/Landing_Navbar"
+import Resources from "./pages/LandingPages/Resources";
 import StudentLogin from "./components/Auth/StudentLogin";
 import FacultyLogin from "./components/Auth/FacultyLogin";
-import Signup from "./components/Auth/Signup";
-import FacultyDashboard from "./pages/FacultyDashboard";
-import Footer from "./components/Footer";
+import FacultyDashboard from "./pages/FacultyPages/FacultyDashboard";
+import Footer from "./pages/LandingPages/Footer";
 import ForgotPassword from "./components/Auth/ForgetPassword";
-import StudentDashboard from "./pages/StudentDashboard";
-import ScheduleLab from "./components/Dashboard/ScheduleLab";
+import StudentDashboard from "./pages/StudentPages/StudentDashboard";
+import ScheduleLab from "./components/FacultyComponent/ScheduledLab";
+import LabSchedule from "./components/FacultyComponent/LabSchedule";
+import FacultySignup from "./components/Auth/FacultySignup";
+import StudentSignup from "./components/Auth/StudentSignup";
 
 const App = () => {
   return (
@@ -21,7 +23,7 @@ const App = () => {
           path="/"
           element={
             <div>
-              <Landing_Navbar />
+             <Landing_Navbar />
               <Home />
             </div>
           }
@@ -63,14 +65,24 @@ const App = () => {
           }
         />
         <Route
-          path="/signup"
+          path="/FacultySignup"
           element={
             <div>
               <Landing_Navbar />
-              <Signup />
+              <FacultySignup />
             </div>
           }
         />
+        <Route
+          path="/StudentSignup"
+          element={
+            <div>
+              <Landing_Navbar />
+              <StudentSignup />
+            </div>
+          }
+        />
+        <Route path="/labschedule" element={<LabSchedule />} />
         <Route path="/facultydashboard" element={<FacultyDashboard />} />
         <Route path="/studentdashboard" element={<StudentDashboard />} />
         <Route

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getStudents } from "../../utils/localStorage";
+import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
 
 const StudentLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -64,6 +65,7 @@ const StudentLogin = () => {
               onChange={handleChange}
               required
             />
+            <PasswordStrengthIndicator password={formData.password} />
           </div>
           <button
             type="submit"
@@ -77,7 +79,7 @@ const StudentLogin = () => {
         <Link to="/forgot-password" className="mt-4 text-blue-600">
           Forgot Password?
         </Link>
-        <Link to="/signup?userType=student" className="mt-4 text-blue-600">
+        <Link to="/StudentSignup" className="mt-4 text-blue-600">
           Sign up as a student
         </Link>
       </div>
