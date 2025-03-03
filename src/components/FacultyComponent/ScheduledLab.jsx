@@ -13,13 +13,13 @@ const ScheduledLab = () => {
           {/* Active Labs Section */}
           <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
             <h3 className="text-xl font-semibold text-gray-700 mb-4 text-center">Active & Upcoming Labs</h3>
-            <ActiveLabSection />
+            <ActiveLabSection isFaculty={true} />
           </div>
 
           {/* Completed Labs Section */}
           <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
             <h3 className="text-xl font-semibold text-gray-700 mb-4 text-center">Completed Labs</h3>
-            <CompletedLabSection />
+            <CompletedLabSection isFaculty={true}/>
           </div>
         </div>
       </div>

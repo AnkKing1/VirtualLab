@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getFaculties } from "../../utils/localStorage";
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
+import { useAuth } from "../../context/AuthProvider";
 
 const FacultyLogin = () => {
+  const { login } = useAuth(); // Using the login function from AuthProvider
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,7 +12,7 @@ const FacultyLogin = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -19,28 +20,27 @@ const FacultyLogin = () => {
     setError("");
     setLoading(true);
 
-    const faculties = getFaculties();
-    const faculty = faculties.find(
-      (f) => f.email === formData.email && f.password === formData.password
-    );
-
     setTimeout(() => {
-      setLoading(false);
-      if (faculty) {
-        navigate("/FacultyDashboard");
+      const success = login(formData.email, formData.password, "faculty");
+
+      if (success) {
+        navigate("/faculty/dashboard");
       } else {
         setError("Invalid email or password.");
+        setLoading(false);
       }
     }, 1000);
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
+      {/* Left Section */}
       <div className="md:w-1/2 bg-purple-600 text-white flex flex-col justify-center items-center p-8">
         <h1 className="text-3xl font-bold mb-4">Faculty Login</h1>
         <p className="text-lg">Sign in to manage your classes and resources.</p>
       </div>
 
+      {/* Right Section - Login Form */}
       <div className="md:w-1/2 bg-white flex flex-col justify-center items-center p-8">
         {error && <p className="text-red-600">{error}</p>}
         <form onSubmit={handleSubmit} className="w-full max-w-md">

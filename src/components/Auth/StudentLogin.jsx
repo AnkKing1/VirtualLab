@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getStudents } from "../../utils/localStorage";
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
+import { useAuth } from "../../context/AuthProvider";
 
 const StudentLogin = () => {
+  const { login } = useAuth(); // Using the login function from AuthProvider
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,20 +15,17 @@ const StudentLogin = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const students = getStudents();
-    const student = students.find(
-      (s) => s.email === formData.email && s.password === formData.password
-    );
+    const success = login(formData.email, formData.password, "student");
 
     setTimeout(() => {
       setLoading(false);
-      if (student) {
-        navigate("/studentdashboard");
+      if (success) {
+        navigate("/student/dashboard");
       } else {
         setError("Invalid email or password.");
       }
@@ -36,11 +34,13 @@ const StudentLogin = () => {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
+      {/* Left Section */}
       <div className="md:w-1/2 bg-blue-600 text-white flex flex-col justify-center items-center p-8">
         <h1 className="text-3xl font-bold mb-4">Student Login</h1>
         <p className="text-lg">Sign in to access your resources and courses.</p>
       </div>
 
+      {/* Right Section - Login Form */}
       <div className="md:w-1/2 bg-white flex flex-col justify-center items-center p-8">
         {error && <p className="text-red-600">{error}</p>}
         <form onSubmit={handleSubmit} className="w-full max-w-md">
@@ -79,7 +79,7 @@ const StudentLogin = () => {
         <Link to="/forgot-password" className="mt-4 text-blue-600">
           Forgot Password?
         </Link>
-        <Link to="/StudentSignup" className="mt-4 text-blue-600">
+        <Link to="/student-signup" className="mt-4 text-blue-600">
           Sign up as a student
         </Link>
       </div>

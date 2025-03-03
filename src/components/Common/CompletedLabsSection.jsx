@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
+import { LabScheduleContext } from "../../context/LabScheduleContext";
 import LabCard from "../Cards/LabCard";
+import StudentLabCard from "../Cards/StudentLabCard"; // Import StudentLabCard
 
-const CompletedLabSection = () => {
-  const [completedLabs, setCompletedLabs] = useState([]);
+const CompletedLabSection = ({ isFaculty }) => {
+  const { scheduledLabs } = useContext(LabScheduleContext);
 
-  useEffect(() => {
-    fetch("/labSchedule.json")
-      .then((response) => response.json())
-      .then((data) => {
-        const today = new Date();
-        const pastLabs = data.filter((lab) => new Date(lab.date) < today);
-        setCompletedLabs(pastLabs);
-      })
-      .catch((error) => console.error("Error fetching completed labs:", error));
-  }, []);
+  // Get today's date
+  const today = new Date();
+
+  // Filter completed labs
+  const completedLabs = scheduledLabs.filter((lab) => new Date(lab.date) < today);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -22,9 +19,13 @@ const CompletedLabSection = () => {
 
         {completedLabs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {completedLabs.map((lab, index) => (
-              <LabCard key={index} {...lab} />
-            ))}
+            {completedLabs.map((lab) =>
+              isFaculty ? (
+                <LabCard key={lab.id} {...lab} />
+              ) : (
+                <StudentLabCard key={lab.id} {...lab} />
+              )
+            )}
           </div>
         ) : (
           <p className="text-gray-500 text-center">No completed labs available.</p>
