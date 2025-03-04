@@ -9,7 +9,7 @@ const CodeEditor = () => {
     <div className="grid grid-cols-3 gap-6 p-6 h-screen bg-gray-50">
       {/* Left Section - Lab Details */}
       <div className="col-span-1 bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-        <LabDetails />
+        <LabDetails/>
       </div>
 
       {/* Right Section - Code Editor, Input, Output */}
