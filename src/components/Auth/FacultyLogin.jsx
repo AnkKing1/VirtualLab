@@ -79,7 +79,7 @@ const FacultyLogin = () => {
         <Link to="/forgot-password" className="mt-4 text-purple-600">
           Forgot Password?
         </Link>
-        <Link to="/FacultySignup" className="mt-4 text-purple-600">
+        <Link to="/faculty-signup" className="mt-4 text-purple-600">
           Sign up as a faculty
         </Link>
       </div>
