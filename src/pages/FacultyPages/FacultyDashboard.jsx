@@ -6,14 +6,16 @@ import Footer from "../LandingPages/Footer";
 
 const FacultyDashboard = () => {
   const [faculty, setFaculty] = useState({});
-  const [showLabSchedule, setShowLabSchedule] = useState(false);
 
   useEffect(() => {
-    fetch("/faculty.json")
-      .then((response) => response.json())
-      .then((data) => setFaculty(data))
-      .catch((error) => console.error("Error fetching faculty data:", error));
+    // Fetch faculty data from local storage
+    const storedFaculty = localStorage.getItem("faculty");
+    if (storedFaculty) {
+      setFaculty(JSON.parse(storedFaculty));
+    }
   }, []);
+
+  const [showLabSchedule, setShowLabSchedule] = useState(false);
 
   return (
     <div className="bg-gray-100 min-h-screen">

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
-import { useAuth } from "../../context/AuthProvider";
+import { useStudentAuth } from "../../context/StudentAuthProvider";
 
 const StudentLogin = () => {
-  const { login } = useAuth(); // Using the login function from AuthProvider
+  const { login } = useStudentAuth(); // Using the login function from AuthProvider
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);

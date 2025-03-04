@@ -1,25 +1,25 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
+import { LabScheduleContext } from "../../context/LabScheduleContext";
 
 const LabDetails = () => {
-  const [lab, setLab] = useState(null);
+  const { id } = useParams(); // Extract ID from URL
+  console.log(String(id))
+  const { scheduledLabs } = useContext(LabScheduleContext);
 
-  useEffect(() => {
-    // Fetch lab details from localStorage
-    const storedLab = JSON.parse(localStorage.getItem("selectedLab"));
-    if (storedLab) {
-      setLab(storedLab);
-    }
-  }, []);
+  // Find the lab matching the current ID
+  const lab = scheduledLabs.find((lab) => lab.id.toString() === id);
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-white shadow-md rounded-lg">
       {lab ? (
         <div>
-          <h2 className="text-xl font-bold">{lab.name}</h2>
-          <p className="text-gray-600">{lab.description}</p>
-          <div className="mt-2 p-2 bg-gray-200 rounded">
-            <strong>Problem Statement:</strong>
-            <p>{lab.question}</p>
+          <h2 className="text-xl font-bold text-gray-800">{lab.labName}</h2>
+          <p className="text-gray-600">{lab.statement}</p>
+          <div className="mt-2 p-2 bg-gray-100 rounded">
+            <strong>Date:</strong> {lab.date} <br />
+            <strong>Time:</strong> {lab.time} <br />
+            <strong>Duration:</strong> {lab.duration} mins
           </div>
         </div>
       ) : (

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
+import { useFacultyAuth } from "../../context/FacultyAuthProvider";
 
 const FacultySignup = () => {
-  const { register } = useAuth();
+  const { register } = useFacultyAuth();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({

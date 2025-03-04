@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider"; 
+import { useStudentAuth } from "../../context/StudentAuthProvider";
+import { useFacultyAuth } from "../../context/FacultyAuthProvider";
 
 const Logout = () => {
-  const { logout } = useAuth(); // Using AuthProvider's logout function
+  const { logout: studentLogout, student } = useStudentAuth();
+  const { logout: facultyLogout, faculty } = useFacultyAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -13,7 +15,11 @@ const Logout = () => {
       setLoading(true);
 
       setTimeout(() => {
-        logout(); // Calls the AuthProvider logout function
+        if (student) {
+          studentLogout(); // Logout for student
+        } else if (faculty) {
+          facultyLogout(); // Logout for faculty
+        }
         navigate("/");
       }, 1000);
     }

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
-import { useAuth } from "../../context/AuthProvider";
+import { useFacultyAuth } from "../../context/FacultyAuthProvider";
 
 const FacultyLogin = () => {
-  const { login } = useAuth(); // Using the login function from AuthProvider
+  const { login } = useFacultyAuth(); // Using the login function from AuthProvider
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -79,7 +79,7 @@ const FacultyLogin = () => {
         <Link to="/forgot-password" className="mt-4 text-purple-600">
           Forgot Password?
         </Link>
-        <Link to="/FacultySignup" className="mt-4 text-purple-600">
+        <Link to="/faculty-signup" className="mt-4 text-purple-600">
           Sign up as a faculty
         </Link>
       </div>
