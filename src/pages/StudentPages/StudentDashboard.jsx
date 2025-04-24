@@ -53,7 +53,7 @@ const StudentDashboard = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-white rounded-full animate-pulse"></div>
                 <img
-                  src={student.profileImage || "/default-profile.png"}
+                  src={student.profileImage || "../../public/Student.jpeg"}
                   alt="Student"
                   className="relative w-24 h-24 rounded-full border-4 border-white shadow-md"
                 />

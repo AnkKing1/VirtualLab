@@ -4,21 +4,29 @@ const EnrolledStudentList = ({ labId }) => {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    // Fetch enrolled students from localStorage
     const enrolledData = JSON.parse(localStorage.getItem("enrolledStudents")) || {};
     setStudents(enrolledData[labId] || []);
   }, [labId]);
 
   return (
-    <div>
+    <div className="p-4 bg-white rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">Enrolled Students</h2>
       {students.length > 0 ? (
-        <ul className="list-disc pl-5 text-gray-700">
+        <div className="space-y-2">
           {students.map((student, index) => (
-            <li key={index} className="py-1">{student.name} - {student.email}</li>
+            <div
+              key={index}
+              className="p-3 border rounded-md bg-gray-50 flex flex-col sm:flex-row sm:justify-between"
+            >
+              <p className="text-gray-700">
+                <span className="font-medium">{student.name}</span>
+              </p>
+              <p className="text-gray-500 text-sm">{student.email}</p>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p className="text-gray-500">No students enrolled in this lab yet.</p>
+        <p className="text-gray-500 italic">No students enrolled in this lab yet.</p>
       )}
     </div>
   );

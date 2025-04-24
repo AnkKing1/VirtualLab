@@ -7,7 +7,7 @@ const LabCard = ({ id, labName, statement, date, time, duration }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedLab, setUpdatedLab] = useState({ labName, statement, date, time, duration });
 
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   const handleUpdate = () => {
     updateLab({ ...updatedLab, id });
@@ -17,7 +17,7 @@ const LabCard = ({ id, labName, statement, date, time, duration }) => {
   return (
     <div 
       className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all border border-gray-200 cursor-pointer"
-      onClick={() => navigate(`/faculty/labs/${id}`)} // Navigate to the lab details page
+      onClick={() => navigate(`/faculty/EnrolledStudentList`)} // Navigate to enrolled students page
     >
       {isEditing ? (
         <div className="space-y-2">
@@ -26,7 +26,7 @@ const LabCard = ({ id, labName, statement, date, time, duration }) => {
           <input type="date" value={updatedLab.date} onChange={(e) => setUpdatedLab({ ...updatedLab, date: e.target.value })} className="w-full p-2 border rounded" />
           <input type="time" value={updatedLab.time} onChange={(e) => setUpdatedLab({ ...updatedLab, time: e.target.value })} className="w-full p-2 border rounded" />
           <input type="number" value={updatedLab.duration} onChange={(e) => setUpdatedLab({ ...updatedLab, duration: e.target.value })} className="w-full p-2 border rounded" />
-          <button onClick={handleUpdate} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+          <button onClick={(e) => { e.stopPropagation(); handleUpdate(); }} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
         </div>
       ) : (
         <div>

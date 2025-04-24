@@ -25,7 +25,7 @@ const FacultyDashboard = () => {
       {/* Welcome Section */}
       <div className="max-w-6xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md flex items-center space-x-6">
         <img
-          src={faculty.profileImage || "/default-profile.png"}
+          src={faculty.profileImage || "../../public/Faculty.jpeg"}
           alt="Faculty"
           className="w-24 h-24 rounded-full border-4 border-blue-500"
         />

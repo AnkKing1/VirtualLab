@@ -22,7 +22,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <div className="relative w-full h-screen bg-cover bg-center bg-fixed bg-blend-overlay bg-black/30" 
-           style={{ backgroundImage: 'url(/assets/NCE.avif)' }}>
+           style={{ backgroundImage: 'url(../../public/NCE.avif)' }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-transparent"></div>
         <div className="relative z-10 flex justify-center items-center h-full text-white text-center px-6">
           <motion.div

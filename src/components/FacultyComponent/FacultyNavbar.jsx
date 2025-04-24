@@ -18,7 +18,7 @@ const FacultyNavbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Lab Logo */}
         <Link to="/faculty-dashboard" className="flex items-center space-x-2">
-          <img src="/lab-logo.png" alt="Lab Logo" className="h-10 w-10 rounded-full" />
+          <img src="../../public/VCL.jpeg" alt="Lab Logo" className="h-10 w-10 rounded-full" />
           <span className="text-xl font-semibold">Virtual Lab</span>
         </Link>
 
@@ -30,7 +30,7 @@ const FacultyNavbar = () => {
           {/* Profile */}
           <Link to="/faculty-profile" className="flex items-center space-x-2">
             <img
-              src="/profile-pic.png"
+              src="../../public/Faculty.jpeg"
               alt="Profile"
               className="h-10 w-10 rounded-full border-2 border-white"
             />

@@ -5,7 +5,29 @@ const StudentLabCard = ({ id, labName, statement, date, time, duration }) => {
   const navigate = useNavigate();
 
   const handleEnroll = () => {
-    navigate(`/code-editor/${id}`); // Navigate to CodeEditor with lab ID
+    // Prompt for student name and email (temporary solution)
+    const name = prompt("Enter your name:");
+    const email = prompt("Enter your email:");
+
+    if (!name || !email) return alert("Enrollment cancelled. Name and Email are required.");
+
+    // Fetch current data
+    const enrolledData = JSON.parse(localStorage.getItem("enrolledStudents")) || {};
+
+    // If no student list for this lab, initialize with empty array
+    if (!enrolledData[id]) enrolledData[id] = [];
+
+    // Avoid duplicate entries
+    const alreadyEnrolled = enrolledData[id].some(
+      (student) => student.email === email
+    );
+    if (!alreadyEnrolled) {
+      enrolledData[id].push({ name, email });
+      localStorage.setItem("enrolledStudents", JSON.stringify(enrolledData));
+    }
+
+    // Navigate to the code editor
+    navigate(`/code-editor/${id}`);
   };
 
   return (

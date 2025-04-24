@@ -91,6 +91,7 @@ const App = () => {
                       {/* Code Editor Route */}
                       <Route path="/code-editor/:labId" element={<CodeEditor />} />
                       
+                      
                     </Routes>
               </ExecutionProvider>
             </OutputProvider>
