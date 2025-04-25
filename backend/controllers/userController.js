@@ -1,5 +1,7 @@
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
+
+// this api for college admin
 export const registerUser = async (req, res) => {
   const { name, email, password, confirmPassword, rollNo, department } = req.body;
 
@@ -55,7 +57,10 @@ export const loginUser = async (req, res) => {
     // 1. Find user
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: 'Invalid email or password' });
-
+    
+    if (!user.isApproved) {
+      return res.status(403).json({ message: 'Your account is not approved yet ' });
+    }
     // 2. Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ message: 'Invalid email or password' });
@@ -76,8 +81,6 @@ export const loginUser = async (req, res) => {
   }
 };
 
-
-
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password -confirmPassword'); // hide passwords
@@ -86,3 +89,5 @@ export const getAllUsers = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch users', error: error.message });
   }
 };
+
+
