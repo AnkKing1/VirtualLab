@@ -1,25 +1,28 @@
 // routes/labRoutes.js
-
-const express = require('express');
+import express from "express";
 const labRouter = express.Router();
-const labController = require('../controllers/labController');
-
+import {
+  createLab,
+  deleteLab,
+  getAllLabs,
+  getLabById,
+  updateLab,
+} from "../controllers/labController.js";
 // (Optional) Middleware to protect routes (like checking if user is logged in)
-// const { protect } = require('../middlewares/authMiddleware');
 
 // Create a new lab
-labRouter.post('/create', /* protect, */ labController.createLab);
+labRouter.post("/create", /* protect, */ createLab);
 
 // Get all labs
-labRouter.get('/', labController.getAllLabs);
+labRouter.get("/", getAllLabs);
 
 // Get a single lab by ID
-labRouter.get('/:id', labController.getLabById);
+labRouter.get("/:id", getLabById);
 
 // Update a lab
-labRouter.put('/:id', /* protect, */ labController.updateLab);
+labRouter.put("/:id", /* protect, */ updateLab);
 
 // Delete a lab
-labRouter.delete('/:id', /* protect, */ labController.deleteLab);
+labRouter.delete("/:id", /* protect, */ deleteLab);
 
 export default labRouter;

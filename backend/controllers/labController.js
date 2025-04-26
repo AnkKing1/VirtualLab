@@ -1,15 +1,15 @@
-// controllers/labController.js
-
-import Lab from '../models/labModel'
-
+import Lab from "../models/labModel.js";
 // Create a new Lab
-exports.createLab = async (req, res) => {
+export const createLab = async (req, res) => {
   try {
-    const { title, facultyName, department, semester, schedule, description } = req.body;
+    const { title, facultyName, department, semester, schedule, description } =
+      req.body;
 
     // Validate input fields
     if (!title || !facultyName || !department || !semester || !schedule) {
-      return res.status(400).json({ message: "Please fill all required fields!" });
+      return res
+        .status(400)
+        .json({ message: "Please fill all required fields!" });
     }
 
     const newLab = new Lab({
@@ -36,7 +36,7 @@ exports.createLab = async (req, res) => {
 };
 
 // Get all Labs
-exports.getAllLabs = async (req, res) => {
+export const getAllLabs = async (req, res) => {
   try {
     const labs = await Lab.find().populate("createdBy", "name email");
 
@@ -51,7 +51,7 @@ exports.getAllLabs = async (req, res) => {
 };
 
 // Get a Lab by ID
-exports.getLabById = async (req, res) => {
+export const getLabById = async (req, res) => {
   try {
     const labId = req.params.id;
 
@@ -72,7 +72,7 @@ exports.getLabById = async (req, res) => {
 };
 
 // Update a Lab
-exports.updateLab = async (req, res) => {
+export const updateLab = async (req, res) => {
   try {
     const labId = req.params.id;
     const updateData = req.body;
@@ -98,7 +98,7 @@ exports.updateLab = async (req, res) => {
 };
 
 // Delete a Lab
-exports.deleteLab = async (req, res) => {
+export const deleteLab = async (req, res) => {
   try {
     const labId = req.params.id;
 
