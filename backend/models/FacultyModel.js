@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema(
+const facultySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -19,11 +19,6 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Password is required'],
       minlength: 6,
     },
-    rollNo: {
-      type: String,
-      required: [true, 'Password is required'],
-      minlength: 6,
-    },
     confirmPassword: {
       type: String,
       required: [true, 'Password is required'],
@@ -34,10 +29,14 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Password is required'],
       minlength: 6,
     },
+    isApproved:{
+      type:Boolean,
+      default:false,
+    }
   },
   { timestamps: true }
 );
 
-const User = mongoose.model('User', userSchema);
+const Faculty = mongoose.model('Faculty', facultySchema);
 
-export default User;
+export default Faculty;
