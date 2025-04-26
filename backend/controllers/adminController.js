@@ -1,6 +1,7 @@
 import User from '../models/userModel.js';
+import Faculty from '../models/FacultyModel.js';
 
-export const approveUser = async (req, res) => {
+ const approveUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
@@ -24,4 +25,32 @@ export const approveUser = async (req, res) => {
       error: error.message,
     });
   }
-};
+}
+
+const approveFaculty = async (req, res) => {
+    try {
+      const facultyId = req.params.id;
+  
+      const faculty = await Faculty.findByIdAndUpdate(
+        facultyId,
+        { isApproved: true },
+        { new: true, runValidators: true }
+      ).select('-password -confirmPassword');
+  
+      if (!faculty) {
+        return res.status(404).json({ message: 'Faculty not found' });
+      }
+  
+      res.status(200).json({
+        message: 'Faculty approved successfully',
+        faculty,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Error approving faculty',
+        error: error.message,
+      });
+    }
+  }
+
+export {approveUser , approveFaculty};
