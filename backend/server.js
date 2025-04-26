@@ -4,9 +4,10 @@ import cors from "cors"
 import dotenv from 'dotenv';
 
 
-import userRouter from "./routes/userRoutes.js";
 import facultyRouter from "./routes/facultyRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
+import labRouter from "./routes/labRoutes.js";
+import studentRouter from "./routes/studentRoutes.js";
 
 
 dotenv.config();
@@ -16,9 +17,10 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/v1/user",userRouter)
+app.use("/api/v1/student",studentRouter)
 app.use("/api/v1/faculty",facultyRouter)
 app.use("/api/v1/admin",adminRouter)
+app.use("api/v1/labs",labRouter)
 
 
 app.listen(process.env.PORT, () => {

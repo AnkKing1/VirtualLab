@@ -1,9 +1,9 @@
 import express from 'express';
-import { approveUser, approveFaculty } from '../controllers/adminController.js';
+import { approveStudent , approveFaculty } from '../controllers/adminController.js';
 
 const adminRouter = express.Router();
 
-adminRouter.patch('/approve-user/:id', approveUser);
+adminRouter.patch('/approve-student/:id', approveStudent);
 adminRouter.patch('/approve-faculty/:id', approveFaculty);
 
 

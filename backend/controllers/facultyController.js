@@ -1,4 +1,4 @@
-import Faculty from '../models/FacultyModel.js';
+import Faculty from '../models/facultyModel.js';
 import bcrypt from 'bcryptjs';
 
 // this api for college admin
