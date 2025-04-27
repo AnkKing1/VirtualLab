@@ -19,7 +19,7 @@ export const createLab = async (req, res) => {
       semester,
       schedule,
       description,
-      createdBy: req.user._id, // assuming you're using an authentication middleware setting req.user
+      // createdBy: "4567890", // assuming you're using an authentication middleware setting req.user
     });
 
     await newLab.save();
@@ -36,17 +36,40 @@ export const createLab = async (req, res) => {
 };
 
 // Get all Labs
+export const getLabBySem = async (req, res) => {
+  try {
+    const { semester } = req.body;
+
+    const lab = await Lab.find({ semester });
+    console.log("lab", lab);
+    if (!lab) {
+      return res.json({
+        success: false,
+        message: "No lab scheduled yet",
+      });
+    }
+
+    return res.json({
+      success: true,
+      lab,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 export const getAllLabs = async (req, res) => {
   try {
-    const labs = await Lab.find().populate("createdBy", "name email");
+    // const labs = await Lab.find().populate("createdBy", "name email");
+    const labs = await Lab.find();
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       labs,
     });
   } catch (error) {
     console.error("Error in getAllLabs:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ message: "Internal Server hello Error" });
   }
 };
 

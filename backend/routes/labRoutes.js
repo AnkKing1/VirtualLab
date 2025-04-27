@@ -6,15 +6,17 @@ import {
   deleteLab,
   getAllLabs,
   getLabById,
+  getLabBySem,
   updateLab,
 } from "../controllers/labController.js";
 // (Optional) Middleware to protect routes (like checking if user is logged in)
 
 // Create a new lab
-labRouter.post("/create", /* protect, */ createLab);
+labRouter.post("/create", createLab);
 
 // Get all labs
-labRouter.get("/", getAllLabs);
+labRouter.get("/get-all-labs", getAllLabs);
+labRouter.get("/get-lab-sem", getLabBySem);
 
 // Get a single lab by ID
 labRouter.get("/:id", getLabById);
