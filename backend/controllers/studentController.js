@@ -13,7 +13,6 @@ export const registerStudent = async (req, res) => {
     name,
     email,
     password,
-    confirmPassword,
     registrationNumber,
     department,
     semester,
@@ -25,7 +24,6 @@ export const registerStudent = async (req, res) => {
       !name ||
       !email ||
       !password ||
-      !confirmPassword ||
       !registrationNumber ||
       !department ||
       !semester
@@ -42,9 +40,9 @@ export const registerStudent = async (req, res) => {
     }
 
     // 3. Check password match
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match." });
-    }
+    // if (password !== confirmPassword) {
+    //   return res.status(400).json({ message: "Passwords do not match." });
+    // }
 
     // 4. Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -54,7 +52,7 @@ export const registerStudent = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      confirmPassword: hashedPassword, // optional: can remove in model later if you want
+      // confirmPassword: hashedPassword, // optional: can remove in model later if you want
       registrationNumber,
       department,
       semester,
@@ -72,6 +70,7 @@ export const registerStudent = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("Error during student registration:", error);  // ADD THIS
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

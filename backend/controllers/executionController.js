@@ -1,5 +1,5 @@
 // controllers/executionController.js
-import fetch from 'node-fetch'; // Ensure 'node-fetch' is installed
+// import fetch from 'node-fetch'; // Ensure 'node-fetch' is installed
 import CodeEditor from '../models/codeEditorModel.js';
 
 const API_URL = "https://judge0-ce.p.rapidapi.com/submissions";
@@ -33,15 +33,15 @@ export const executeCode = async (req, res) => {
   }
 
   try {
-    const submissionRes = await fetch(`${API_URL}?base64_encoded=false&wait=false`, {
-      method: "POST",
-      headers: API_HEADERS,
-      body: JSON.stringify({
-        source_code: code,
-        language_id: getLanguageId(language),
-        stdin: input || "",
-      }),
-    });
+    // const submissionRes = await fetch(`${API_URL}?base64_encoded=false&wait=false`, {
+    //   method: "POST",
+    //   headers: API_HEADERS,
+    //   body: JSON.stringify({
+    //     source_code: code,
+    //     language_id: getLanguageId(language),
+    //     stdin: input || "",
+    //   }),
+    // });
 
     const submissionData = await submissionRes.json();
     console.log("📨 Submission Data:", submissionData);

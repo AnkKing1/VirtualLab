@@ -9,13 +9,18 @@ import labRouter from "./routes/labRoutes.js";
 import studentRouter from "./routes/studentRoutes.js";
 import executionRoutes from './routes/executionRoutes.js';
 
+const corsOptions = {
+  origin:"http://localhost:5173",
+  methods:"GET, POST, PUT, PATCH ,HEAD",
+  credentials:true,
+};
 
 
 dotenv.config();
 const app = express();
+app.use(cors(corsOptions)); 
 connectDB();
 
-app.use(cors());
 app.use(express.json());
 app.use("/api/v1/student", studentRouter);
 app.use("/api/v1/faculty", facultyRouter);

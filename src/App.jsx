@@ -72,7 +72,7 @@ const App = () => {
                         <Route path="/student-login" element={<StudentLogin />} />
                         <Route path="/faculty-login" element={<FacultyLogin />} />
                         <Route path="/faculty-signup" element={<FacultySignup />} />
-                        <Route path="/api/v1/student/signup" element={<StudentSignup />} />
+                        <Route path="student-signup" element={<StudentSignup />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                       </Route>
 

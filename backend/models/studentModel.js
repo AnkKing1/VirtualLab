@@ -19,11 +19,11 @@ const studentSchema = new mongoose.Schema(
       required: [true, 'Password is required'],
       minlength: 6,
     },
-    confirmPassword: {
-      type: String,
-      required: [true, 'Confirm Password is required'],
-      minlength: 6,
-    },
+    // confirmPassword: {
+    //   type: String,
+    //   // required: [true, 'Confirm Password is required'],
+    //   minlength: 6,
+    // },
     registrationNumber: {
       type: String,
       required: [true, 'Registration Number is required'],
@@ -36,7 +36,7 @@ const studentSchema = new mongoose.Schema(
       trim: true,
     },
     semester: {
-      type: String,
+      type:String,
       required: [true, 'Semester is required'],
       enum: [
         "1st", "2nd", "3rd", "4th",

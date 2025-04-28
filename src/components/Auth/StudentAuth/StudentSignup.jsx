@@ -14,16 +14,17 @@ const StudentSignup = () => {
     registrationNumber: "",
     department: "",
     semester: ""
-  });
+  }); 
 
   const [error, setError] = useState("");
   const [passwordStrength, setPasswordStrength] = useState("");
 
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -45,11 +46,10 @@ const StudentSignup = () => {
 
     try {
       // Send form data to backend API
-      const response = await axios.post("/api/v1/student/signup", {
-        ...formData,
-        userType: "student"
+      const response = await axios.post("http://localhost:5000/api/v1/student/signup", {
+       ...formData,
       });
-
+      console.log(response);
       if (response.data.success) {
         navigate("/student-login");
       } else {
@@ -132,14 +132,14 @@ const StudentSignup = () => {
               value={formData.semester}
             >
               <option value="">Select Semester</option>
-              <option value="1">1st Semester</option>
-              <option value="2">2nd Semester</option>
-              <option value="3">3rd Semester</option>
-              <option value="4">4th Semester</option>
-              <option value="5">5th Semester</option>
-              <option value="6">6th Semester</option>
-              <option value="7">7th Semester</option>
-              <option value="8">8th Semester</option>
+              <option value="1st">1st</option>
+              <option value="2nd">2nd</option>
+              <option value="3rd">3rd</option>
+              <option value="4th">4th</option>
+              <option value="5th">5th</option>
+              <option value="6th">6th</option>
+              <option value="7th">7th</option>
+              <option value="8th">8th</option>
             </select>
           </div>
 

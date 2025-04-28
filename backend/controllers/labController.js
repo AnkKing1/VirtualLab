@@ -2,11 +2,11 @@ import Lab from "../models/labModel.js";
 // Create a new Lab
 export const createLab = async (req, res) => {
   try {
-    const { title, facultyName, department, semester, schedule, description } =
+    const { title, facultyName, department, semester, schedule, duration, description } =
       req.body;
 
     // Validate input fields
-    if (!title || !facultyName || !department || !semester || !schedule) {
+    if (!title || !facultyName || !department || !semester || !schedule || ! duration) {
       return res
         .status(400)
         .json({ message: "Please fill all required fields!" });
@@ -18,6 +18,7 @@ export const createLab = async (req, res) => {
       department,
       semester,
       schedule,
+      duration,
       description,
       // createdBy: "4567890", // assuming you're using an authentication middleware setting req.user
     });
