@@ -3,9 +3,9 @@ import { registerFaculty, loginFaculty, getAllFaculties } from '../controllers/f
 
 const facultyRouter = express.Router();
 
-facultyRouter.post('/faculty-signup', registerFaculty);
+facultyRouter.post('/signup', registerFaculty);
 
-facultyRouter.post('/faculty-login', loginFaculty);
+facultyRouter.post('/login', loginFaculty);
 facultyRouter.get('/get-faculties', getAllFaculties);
 
 export default facultyRouter;
