@@ -129,3 +129,40 @@ export const getAllStudents = async (req, res) => {
       .json({ message: "Failed to fetch students", error: error.message });
   }
 };
+
+export const forgotPassword = async (req, res) => {
+  const { email, newPassword, confirmNewPassword } = req.body;
+
+  try {
+    // 1. Check if student exists
+    const student = await Student.findOne({ email });
+
+    if (!student) {
+      return res.status(404).json({ success: false, message: "Student not found with this email." });
+    }
+
+    // 2. Check if passwords match
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ success: false, message: "Passwords do not match." });
+    }
+
+    // 3. Check password strength (basic length check, you can improve)
+    if (newPassword.length < 8) {
+      return res.status(400).json({ success: false, message: "Password must be at least 8 characters." });
+    }
+
+    // 4. Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // 5. Update password
+    student.password = hashedPassword;
+    await student.save();
+
+    res.status(200).json({ success: true, message: "Password updated successfully." });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error. Try again later." });
+  }
+};
