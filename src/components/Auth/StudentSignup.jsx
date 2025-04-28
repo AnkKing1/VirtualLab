@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"; // <-- Import axios
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
-import { useStudentAuth } from "../../context/StudentAuthProvider";
 
 const StudentSignup = () => {
-  const { register } = useStudentAuth();
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    rollNumber: "",
+    registrationNumber: "",
     department: "",
+    semester: ""
   });
 
   const [error, setError] = useState("");
@@ -24,7 +24,7 @@ const StudentSignup = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -43,12 +43,21 @@ const StudentSignup = () => {
       return;
     }
 
-    const result = register({ ...formData, userType: "student" }, "students");
+    try {
+      // Send form data to backend API
+      const response = await axios.post("/api/v1/student/signup", {
+        ...formData,
+        userType: "student"
+      });
 
-    if (result.success) {
-      navigate("/student-login");
-    } else {
-      setError(result.message);
+      if (response.data.success) {
+        navigate("/student-login");
+      } else {
+        setError(response.data.message || "Signup failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Server error. Try again later.");
     }
   };
 
@@ -64,6 +73,7 @@ const StudentSignup = () => {
       <div className="md:w-1/2 bg-white flex flex-col justify-center items-center p-8">
         {error && <p className="text-red-600">{error}</p>}
         <form onSubmit={handleSubmit} className="w-full max-w-md">
+          {/* Name */}
           <div className="mb-4">
             <label className="block text-gray-700">Full Name</label>
             <input 
@@ -74,6 +84,8 @@ const StudentSignup = () => {
               required 
             />
           </div>
+          
+          {/* Email */}
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
             <input 
@@ -84,16 +96,20 @@ const StudentSignup = () => {
               required 
             />
           </div>
+
+          {/* Registration Number */}
           <div className="mb-4">
-            <label className="block text-gray-700">Roll Number</label>
+            <label className="block text-gray-700">Registration Number</label>
             <input 
               type="text" 
-              name="rollNumber" 
+              name="registrationNumber" 
               className="w-full px-4 py-2 border rounded" 
               onChange={handleChange} 
               required 
             />
           </div>
+
+          {/* Department */}
           <div className="mb-4">
             <label className="block text-gray-700">Department</label>
             <input 
@@ -104,6 +120,30 @@ const StudentSignup = () => {
               required 
             />
           </div>
+
+          {/* Semester */}
+          <div className="mb-4">
+            <label className="block text-gray-700">Semester</label>
+            <select 
+              name="semester"
+              className="w-full px-4 py-2 border rounded" 
+              onChange={handleChange} 
+              required
+              value={formData.semester}
+            >
+              <option value="">Select Semester</option>
+              <option value="1">1st Semester</option>
+              <option value="2">2nd Semester</option>
+              <option value="3">3rd Semester</option>
+              <option value="4">4th Semester</option>
+              <option value="5">5th Semester</option>
+              <option value="6">6th Semester</option>
+              <option value="7">7th Semester</option>
+              <option value="8">8th Semester</option>
+            </select>
+          </div>
+
+          {/* Password */}
           <div className="mb-4">
             <label className="block text-gray-700">Password</label>
             <input 
@@ -115,6 +155,8 @@ const StudentSignup = () => {
             />
             <PasswordStrengthIndicator password={formData.password} setStrength={setPasswordStrength} />
           </div>
+
+          {/* Confirm Password */}
           <div className="mb-4">
             <label className="block text-gray-700">Confirm Password</label>
             <input 
@@ -125,6 +167,8 @@ const StudentSignup = () => {
               required 
             />
           </div>
+
+          {/* Submit Button */}
           <button 
             type="submit" 
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
@@ -132,6 +176,7 @@ const StudentSignup = () => {
             Sign Up
           </button>
         </form>
+
         <Link to="/student-login" className="mt-4 text-blue-600">
           Already have an account? Login
         </Link>
