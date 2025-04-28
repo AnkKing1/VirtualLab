@@ -35,7 +35,10 @@ export const createLab = async (req, res) => {
   }
 };
 
-// Get all Labs
+// Get labs by semester
+// needs to be changed : semester info will not be fetched from body 
+// it'll be fetched from student own info where he stored the semester data
+
 export const getLabBySem = async (req, res) => {
   try {
     const { semester } = req.body;
@@ -58,6 +61,8 @@ export const getLabBySem = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// Get all labas
 export const getAllLabs = async (req, res) => {
   try {
     // const labs = await Lab.find().populate("createdBy", "name email");
@@ -73,7 +78,7 @@ export const getAllLabs = async (req, res) => {
   }
 };
 
-// Get a Lab by ID
+// Get a Lab by ID (createdBy)
 export const getLabById = async (req, res) => {
   try {
     const labId = req.params.id;

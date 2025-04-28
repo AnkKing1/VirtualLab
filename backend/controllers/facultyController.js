@@ -1,7 +1,7 @@
 import Faculty from "../models/facultyModel.js";
 import bcrypt from "bcryptjs";
 
-// this api for college admin
+// Register faculty
 export const registerFaculty = async (req, res) => {
   const { name, email, password, confirmPassword, department } = req.body;
 
@@ -50,6 +50,7 @@ export const registerFaculty = async (req, res) => {
   }
 };
 
+// login faculty
 export const loginFaculty = async (req, res) => {
   const { email, password } = req.body;
 
@@ -84,6 +85,7 @@ export const loginFaculty = async (req, res) => {
   }
 };
 
+// get all faculties
 export const getAllFaculties = async (req, res) => {
   try {
     const faculties = await Faculty.find().select("-password -confirmPassword"); // hide passwords

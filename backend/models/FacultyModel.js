@@ -26,7 +26,7 @@ const facultySchema = new mongoose.Schema(
     },
     department: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, "Department is required"],
       minlength: 6,
     },
     isApproved: {

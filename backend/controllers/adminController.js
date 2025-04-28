@@ -1,7 +1,8 @@
 import Student from '../models/studentModel.js';
 import Faculty from '../models/facultyModel.js';
 
- const approveStudent = async (req, res) => {
+// To Approve Students
+ export const approveStudent = async (req, res) => {
   try {
     const studentId = req.params.id;
 
@@ -25,9 +26,11 @@ import Faculty from '../models/facultyModel.js';
       error: error.message,
     });
   }
-}
+};
 
-const approveFaculty = async (req, res) => {
+
+// To Approve Faculties
+export const approveFaculty = async (req, res) => {
     try {
       const facultyId = req.params.id;
   
@@ -51,6 +54,80 @@ const approveFaculty = async (req, res) => {
         error: error.message,
       });
     }
-  }
+  };
 
-export {approveStudent , approveFaculty};
+// Register Admin
+export const registerAdmin = async (req, res) => {
+  const { name, email, password, confirmPassword} = req.body;
+
+  try {
+    // 1. Validate required fields
+    if (!name || !email || !password || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    // 2. Check if user already exists
+    const existingAdmin = await Faculty.findOne({ email });
+    if (existingAdmin) {
+      return res
+        .status(409)
+        .json({ message: "Faculty already exists with this email." });
+    }
+
+    // 3. Check password match
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match." });
+    }
+
+    // 4. Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 5. Save admin
+    const admin = await Admin.create({
+      name,
+      email,
+      password: hashedPassword,
+      confirmPassword: hashedPassword, // optional: can remove this field from schema
+    });
+
+    res.status(201).json({
+      message: "Admin registered successfully",
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Login Admin
+export const loginAdmin = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // 1. Find admin
+    const admin = await Admin.findOne({ email });
+    if (!admin)
+      return res.status(401).json({ message: "Invalid email or password" });
+
+    // 2. Compare password
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch)
+      return res.status(401).json({ message: "Invalid email or password" });
+
+    // 3. Respond with admin info (you can add JWT token here)
+    res.status(200).json({
+      message: "Login successful",
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
