@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
-import { useFacultyAuth } from "../../context/FacultyAuthProvider";
 
-const FacultyLogin = () => {
-  const { login } = useFacultyAuth(); // Using the login function from AuthProvider
+const AdminLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,10 +18,10 @@ const FacultyLogin = () => {
     setLoading(true);
 
     setTimeout(() => {
-      const success = login(formData.email, formData.password, "faculty");
+      const success = login(formData.email, formData.password, "admin");
 
       if (success) {
-        navigate("/faculty/dashboard");
+        navigate("/admin/dashboard");
       } else {
         setError("Invalid email or password.");
         setLoading(false);
@@ -36,8 +33,8 @@ const FacultyLogin = () => {
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
       {/* Left Section */}
       <div className="md:w-1/2 bg-purple-600 text-white flex flex-col justify-center items-center p-8">
-        <h1 className="text-3xl font-bold mb-4">Faculty Login</h1>
-        <p className="text-lg">Sign in to manage your classes and resources.</p>
+        <h1 className="text-3xl font-bold mb-4">Admin Login</h1>
+        <p className="text-lg">Sign in to manage Students and Faculties Access.</p>
       </div>
 
       {/* Right Section - Login Form */}
@@ -65,7 +62,6 @@ const FacultyLogin = () => {
               onChange={handleChange}
               required
             />
-            <PasswordStrengthIndicator password={formData.password} />
           </div>
           <button
             type="submit"
@@ -80,11 +76,11 @@ const FacultyLogin = () => {
           Forgot Password?
         </Link>
         <Link to="/faculty-signup" className="mt-4 text-purple-600">
-          Sign up as a faculty
+          Sign up as a Admin
         </Link>
       </div>
     </div>
   );
 };
 
-export default FacultyLogin;
+export default AdminLogin;

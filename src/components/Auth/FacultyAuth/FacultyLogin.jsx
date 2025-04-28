@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
-import { useStudentAuth } from "../../context/StudentAuthProvider";
+import PasswordStrengthIndicator from "../PasswordStrengthIndicator";
+import { useFacultyAuth } from "../../../context/FacultyAuthProvider";
 
-const StudentLogin = () => {
-  const { login } = useStudentAuth(); // Using the login function from AuthProvider
+const FacultyLogin = () => {
+  const { login } = useFacultyAuth(); // Using the login function from AuthProvider
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -12,22 +12,22 @@ const StudentLogin = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const success = login(formData.email, formData.password, "student");
-
     setTimeout(() => {
-      setLoading(false);
+      const success = login(formData.email, formData.password, "faculty");
+
       if (success) {
-        navigate("/student/dashboard");
+        navigate("/faculty/dashboard");
       } else {
         setError("Invalid email or password.");
+        setLoading(false);
       }
     }, 1000);
   };
@@ -35,9 +35,9 @@ const StudentLogin = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
       {/* Left Section */}
-      <div className="md:w-1/2 bg-blue-600 text-white flex flex-col justify-center items-center p-8">
-        <h1 className="text-3xl font-bold mb-4">Student Login</h1>
-        <p className="text-lg">Sign in to access your resources and courses.</p>
+      <div className="md:w-1/2 bg-purple-600 text-white flex flex-col justify-center items-center p-8">
+        <h1 className="text-3xl font-bold mb-4">Faculty Login</h1>
+        <p className="text-lg">Sign in to manage your classes and resources.</p>
       </div>
 
       {/* Right Section - Login Form */}
@@ -69,22 +69,22 @@ const StudentLogin = () => {
           </div>
           <button
             type="submit"
-            className={`w-full bg-blue-600 text-white py-2 rounded ${
-              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+            className={`w-full bg-purple-600 text-white py-2 rounded ${
+              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-purple-700"
             }`}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        <Link to="/forgot-password" className="mt-4 text-blue-600">
+        <Link to="/forgot-password" className="mt-4 text-purple-600">
           Forgot Password?
         </Link>
-        <Link to="/api/v1/student/signup" className="mt-4 text-blue-600">
-          Sign up as a student
+        <Link to="/faculty-signup" className="mt-4 text-purple-600">
+          Sign up as a faculty
         </Link>
       </div>
     </div>
   );
 };
 
-export default StudentLogin;
+export default FacultyLogin;

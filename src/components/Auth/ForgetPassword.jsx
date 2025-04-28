@@ -13,7 +13,7 @@ const ForgotPassword = () => {
   const userType = searchParams.get("userType");
 
   const getUsers = () => {
-    const users = JSON.parse(localStorage.getItem(userType === "student" ? "students" : "faculties")) || [];
+    const users = JSON.parse(localStorage.getItem(userType === "student" ? "students" : "faculties", "admin")) || [];
     return users;
   };
 
@@ -24,7 +24,7 @@ const ForgotPassword = () => {
     if (userIndex === -1) return false;
 
     users[userIndex].password = newPassword;
-    localStorage.setItem(userType === "student" ? "students" : "faculties", JSON.stringify(users));
+    localStorage.setItem(userType === "student" ? "students" : "faculties","admin", JSON.stringify(users));
     return true;
   };
 
@@ -46,7 +46,7 @@ const ForgotPassword = () => {
 
     if (success) {
       setMessage("✅ Password updated successfully. Redirecting to login...");
-      setTimeout(() => navigate(userType === "student" ? "/student-login" : "/faculty-login"), 2000);
+      setTimeout(() => navigate(userType === "student" ? "/student-login" : "/faculty-login", "/admin-login"), 2000);
     } else {
       setMessage("❌ User not found. Please check your email.");
     }
