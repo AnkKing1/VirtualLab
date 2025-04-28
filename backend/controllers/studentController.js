@@ -3,8 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
+  return jwt.sign({ id }, "ankit123", {
+    expiresIn: "1d",
   });
 };
 // College Admin Register Student
@@ -98,6 +98,7 @@ export const loginStudent = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
 
     const token = createToken(student._id);
+    console.log(token);
 
     // 3. Respond with student info (JWT token can be added here later)
     res.status(200).json({
@@ -109,6 +110,7 @@ export const loginStudent = async (req, res) => {
         registrationNumber: student.registrationNumber,
         department: student.department,
         semester: student.semester,
+        token: token,
       },
     });
   } catch (error) {
