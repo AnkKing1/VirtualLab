@@ -50,7 +50,11 @@ export const registerFaculty = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 // login faculty
+=======
+//login Faculty
+>>>>>>> fa34cbade8afbcfb0f77b82b60b1ef7fe7af134e
 export const loginFaculty = async (req, res) => {
   const { email, password } = req.body;
 
@@ -85,7 +89,11 @@ export const loginFaculty = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 // get all faculties
+=======
+//get all faculties
+>>>>>>> fa34cbade8afbcfb0f77b82b60b1ef7fe7af134e
 export const getAllFaculties = async (req, res) => {
   try {
     const faculties = await Faculty.find().select("-password -confirmPassword"); // hide passwords
@@ -94,5 +102,43 @@ export const getAllFaculties = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to fetch users", error: error.message });
+  }
+};
+
+//forgot password
+export const forgotPassword = async (req, res) => {
+  const { email, newPassword, confirmNewPassword } = req.body;
+
+  try {
+    // 1. Check if faculty exists
+    const faculty = await Faculty.findOne({ email });
+
+    if (!faculty) {
+      return res.status(404).json({ success: false, message: "Student not found with this email." });
+    }
+
+    // 2. Check if passwords match
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ success: false, message: "Passwords do not match." });
+    }
+
+    // 3. Check password strength (basic length check, you can improve)
+    if (newPassword.length < 8) {
+      return res.status(400).json({ success: false, message: "Password must be at least 8 characters." });
+    }
+
+    // 4. Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // 5. Update password
+    faculty.password = hashedPassword;
+    await student.save();
+
+    res.status(200).json({ success: true, message: "Password updated successfully." });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error. Try again later." });
   }
 };
