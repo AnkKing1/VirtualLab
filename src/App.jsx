@@ -5,7 +5,8 @@ import {
   Route,
   Outlet,
 } from "react-router-dom";
-import Landing_Navbar from "./components/LandingComponent/Landing_Navbar";
+
+import Landing_Navbar from "./pages/LandingPages/Landing_Navbar"
 import Footer from "./pages/LandingPages/Footer";
 import Home from "./pages/LandingPages/Home";
 import About from "./pages/LandingPages/About";
@@ -15,8 +16,8 @@ import FacultyLogin from "./components/Auth/FacultyAuth/FacultyLogin";
 import FacultySignup from "./components/Auth/FacultyAuth/FacultySignup";
 import StudentSignup from "./components/Auth/StudentAuth/StudentSignup";
 import ForgotPassword from "./components/Auth/ForgetPassword";
-import FacultyDashboard from "./pages/FacultyPages/FacultyDashboard";
-import StudentDashboard from "./pages/StudentPages/StudentDashboard";
+import FacultyDashboard from "./pages/FacultyDashboard";
+import StudentDashboard from "./pages/StudentDashboard";
 import ScheduleLab from "./components/FacultyComponent/ScheduledLab";
 import LabSchedule from "./components/FacultyComponent/LabSchedule";
 import CodeEditor from "./pages/CodeEditor/CodeEditor"; // Added CodeEditor

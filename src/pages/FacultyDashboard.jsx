@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import FacultyNavbar from "../../components/FacultyComponent/FacultyNavbar";
-import LabSchedule from "../../components/FacultyComponent/LabSchedule";
-import ScheduledLab from "../../components/FacultyComponent/ScheduledLab";
-import Footer from "../LandingPages/Footer";
+import FacultyNavbar from "../components/FacultyComponent/FacultyNavbar";
+import LabSchedule from "../components/FacultyComponent/LabSchedule";
+import ScheduledLab from "../components/FacultyComponent/ScheduledLab";
+import Footer from "./LandingPages/Footer";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 

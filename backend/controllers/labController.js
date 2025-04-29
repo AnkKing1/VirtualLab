@@ -19,7 +19,7 @@ export const createLab = async (req, res) => {
     const newLab = new Lab({
       title,
       semester,
-      schedule,
+      schedule: new Date(schedule),
       duration,
       description,
       createdBy:objectId,

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
-import StudentNavbar from "../../components/StudentComponent/StudentNavbar";
-import CompletedLabSection from "../../components/Common/CompletedLabsSection";
-import ActiveLabSection from "../../components/Common/ActiveLabSection";
-import Footer from "../LandingPages/Footer";
-import { LabScheduleContext } from "../../context/LabScheduleContext";
+import StudentNavbar from "../components/StudentComponent/StudentNavbar";
+import CompletedLabSection from "../components/Common/CompletedLabsSection";
+import ActiveLabSection from "../components/Common/ActiveLabSection";
+import Footer from "./LandingPages/Footer";
+import { LabScheduleContext } from "../context/LabScheduleContext";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 

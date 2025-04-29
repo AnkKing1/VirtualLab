@@ -9,10 +9,11 @@ const labSchema = new mongoose.Schema(
     },
     description: {
       type: String,
+      required:true,
     },
     semester: {
       type: String,
-      required: true,
+      required: true, 
       enum: ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"],
     },
     schedule:{
@@ -20,7 +21,7 @@ const labSchema = new mongoose.Schema(
       required:true,
     },
     duration: {
-      type: String, // in minutes
+      type: Number, // in minutes
       required: true,
     },
     createdBy: {
