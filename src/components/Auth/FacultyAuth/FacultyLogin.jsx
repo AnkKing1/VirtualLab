@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthIndicator from "../PasswordStrengthIndicator";
-import { useFacultyAuth } from "../../../context/FacultyAuthProvider";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const FacultyLogin = () => {
-  const { login } = useFacultyAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,20 +15,29 @@ const FacultyLogin = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
+    
 
-    setTimeout(() => {
-      const success = login(formData.email, formData.password, "faculty");
-      if (success) {
-        navigate("/faculty/dashboard");
-      } else {
-        setError("Invalid email or password.");
+    try {
+      setLoading(true);
+      const response = await axios.post("http://localhost:5000/api/v1/faculty/login",{... formData});
+      console.log(response);
+
+      setTimeout(() => {
         setLoading(false);
-      }
-    }, 1000);
+        if (response.data.faculty.success) {
+          navigate("/faculty/dashboard");
+        } else {
+          setError(response.data.message||"Invalid email or password.");
+        }
+      }, 1000);
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Server error. Try again later.");
+      
+    }
   };
 
   return (

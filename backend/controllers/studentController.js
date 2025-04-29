@@ -61,6 +61,7 @@ export const registerStudent = async (req, res) => {
     res.status(201).json({
       message: "Student registered successfully",
       student: {
+        success: true,
         id: student._id,
         name: student.name,
         email: student.email,
@@ -103,6 +104,7 @@ export const loginStudent = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       student: {
+        success: true,
         id: student._id,
         name: student.name,
         email: student.email,

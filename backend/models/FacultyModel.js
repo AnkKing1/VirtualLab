@@ -19,15 +19,15 @@ const facultySchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: 6,
     },
-    confirmPassword: {
-      type: String,
-      required: [true, "Password is required"],
-      minlength: 6,
-    },
+    // confirmPassword: {
+    //   type: String,
+    //   required: [true, "Password is required"],
+    //   minlength: 6,
+    // },
     department: {
       type: String,
       required: [true, "Department is required"],
-      minlength: 6,
+      // minlength: 6,
     },
     isApproved: {
       type: Boolean,

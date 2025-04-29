@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthIndicator from "../PasswordStrengthIndicator";
-import { useStudentAuth } from "../../../context/StudentAuthProvider";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const StudentLogin = () => {
-  const { login } = useStudentAuth(); // Using the login function from AuthProvider
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,16 +20,24 @@ const StudentLogin = () => {
     setError("");
     setLoading(true);
 
-    const success = login(formData.email, formData.password, "student");
+    try {
+      const response = await axios.post("http://localhost:5000/api/v1/student/login",{... formData});
+      console.log(response);
 
-    setTimeout(() => {
-      setLoading(false);
-      if (success) {
-        navigate("/student/dashboard");
-      } else {
-        setError("Invalid email or password.");
-      }
-    }, 1000);
+      setTimeout(() => {
+        setLoading(false);
+        if (response.data.student.success) {
+          navigate("/student/dashboard");
+        } else {
+          setError(response.data.message||"Invalid email or password.");
+        }
+      }, 1000);
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Server error. Try again later.");
+      
+    }
+    
   };
 
   return (

@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthIndicator from "../PasswordStrengthIndicator";
-import { useFacultyAuth } from "../../../context/FacultyAuthProvider";
 import { motion } from "framer-motion";
 import axios from "axios";
 
 const FacultySignup = () => {
-  const { register } = useFacultyAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -49,7 +47,7 @@ const FacultySignup = () => {
         ...formData,
       });
       console.log(response);
-      if (response.data.success) {
+      if (response.data.faculty.success) {
         navigate("/faculty-login");
       } else {
         setError(response.data.message || "Signup failed.");

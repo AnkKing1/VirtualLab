@@ -1,13 +1,20 @@
 import Faculty from "../models/facultyModel.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+const createToken = (id) => {
+  return jwt.sign({ id }, "ankit123", {
+    expiresIn: "1d",
+  });
+};
 
 // Register faculty
 export const registerFaculty = async (req, res) => {
-  const { name, email, password, confirmPassword, department } = req.body;
+  const { name, email, password, department } = req.body;
 
   try {
     // 1. Validate required fields
-    if (!name || !email || !password || !confirmPassword || !department) {
+    if (!name || !email || !password ||  !department) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
@@ -20,9 +27,9 @@ export const registerFaculty = async (req, res) => {
     }
 
     // 3. Check password match
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match." });
-    }
+    // if (password !== confirmPassword) {
+    //   return res.status(400).json({ message: "Passwords do not match." });
+    // }
 
     // 4. Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,13 +39,14 @@ export const registerFaculty = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      confirmPassword: hashedPassword, // optional: can remove this field from schema
+      // confirmPassword: hashedPassword, // optional: can remove this field from schema
       department,
     });
 
     res.status(201).json({
       message: "Faculty registered successfully",
       faculty: {
+        success:true,
         id: faculty._id,
         name: faculty.name,
         email: faculty.email,
@@ -70,14 +78,19 @@ export const loginFaculty = async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: "Invalid email or password" });
 
+    const token = createToken(faculty._id);
+    console.log(token);
+
     // 3. Respond with faculty info (you can add JWT token here)
     res.status(200).json({
       message: "Login successful",
       faculty: {
+        success:true,
         id: faculty._id,
         name: faculty.name,
         email: faculty.email,
         department: faculty.department,
+        token:token,
       },
     });
   } catch (error) {
