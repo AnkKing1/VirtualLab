@@ -44,7 +44,7 @@ const StudentSignup = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/student/signup", { ...formData });
+      const response = await axios.post("api/v1/student/signup", { ...formData });
       console.log(response);
       if (response.data.student.success) {
         navigate("/student-login");

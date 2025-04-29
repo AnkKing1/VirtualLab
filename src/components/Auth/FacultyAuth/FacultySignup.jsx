@@ -43,7 +43,7 @@ const FacultySignup = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/faculty/signup", {
+      const response = await axios.post("api/v1/faculty/signup", {
         ...formData,
       });
       console.log(response);

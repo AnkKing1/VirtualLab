@@ -25,7 +25,7 @@ const StudentLogin = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:5000/api/v1/student/login",{... formData});
+      const response = await axios.post("api/v1/student/login",{... formData});
       console.log(response);
       setLoading(false);
 

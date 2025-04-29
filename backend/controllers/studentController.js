@@ -1,6 +1,7 @@
 import Student from "../models/studentModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Lab from "../models/labModel.js";
 
 const createToken = (id) => {
   return jwt.sign({ id }, "ankit123", {
@@ -165,5 +166,40 @@ export const forgotPassword = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server error. Try again later." });
+  }
+};
+
+// Enroll a student in a lab
+export const enrollStudent = async (req, res) => {
+  try {
+    const { labId } = req.params;
+    const { studentId } = req.body;
+
+    const lab = await Lab.findById(labId);
+
+    if (!lab) {
+      return res.status(404).json({ success: false, message: "Lab not found" });
+    }
+
+    // Check if student already enrolled
+    if (lab.studentsEnrolled.includes(studentId)) {
+      return res.status(400).json({ success: false, message: "Student already enrolled" });
+    }
+
+    lab.studentsEnrolled.push(studentId);
+    await lab.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Student enrolled successfully",
+      lab,
+    });
+  } catch (error) {
+    console.error("Error enrolling student:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to enroll student",
+      error: error.message,
+    });
   }
 };

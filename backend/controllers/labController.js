@@ -1,12 +1,16 @@
 import Lab from "../models/labModel.js";
+import mongoose from 'mongoose'
+
+
 // Create a new Lab
 export const createLab = async (req, res) => {
   try {
-    const { title, facultyName, department, semester, schedule, duration, description } =
+    const { title, semester, schedule, duration, description, createdBy } =
       req.body;
 
+      const objectId = new mongoose.Types.ObjectId(createdBy);
     // Validate input fields
-    if (!title || !facultyName || !department || !semester || !schedule || ! duration) {
+    if (!title || !semester || !schedule || ! duration || ! createdBy) {
       return res
         .status(400)
         .json({ message: "Please fill all required fields!" });
@@ -14,13 +18,11 @@ export const createLab = async (req, res) => {
 
     const newLab = new Lab({
       title,
-      facultyName,
-      department,
       semester,
       schedule,
       duration,
       description,
-      // createdBy: "4567890", // assuming you're using an authentication middleware setting req.user
+      createdBy:objectId,
     });
 
     await newLab.save();
@@ -36,9 +38,8 @@ export const createLab = async (req, res) => {
   }
 };
 
-// Get labs by semester
-// needs to be changed : semester info will not be fetched from body 
-// it'll be fetched from student own info where he stored the semester data
+
+
 
 export const getLabBySem = async (req, res) => {
   try {
@@ -66,8 +67,8 @@ export const getLabBySem = async (req, res) => {
 // Get all labas
 export const getAllLabs = async (req, res) => {
   try {
-    // const labs = await Lab.find().populate("createdBy", "name email");
-    const labs = await Lab.find();
+    const labs = await Lab.find().populate("createdBy", "name email");
+    // const labs = await Lab.find();
 
     res.status(200).json({
       success: true,

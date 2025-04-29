@@ -33,6 +33,10 @@ const facultySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    labs:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"lab"
+    }
   },
   { timestamps: true }
 );

@@ -7,12 +7,8 @@ const labSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    facultyName: {
+    description: {
       type: String,
-    },
-    department: {
-      type: String,
-      required: true,
     },
     semester: {
       type: String,
@@ -24,21 +20,18 @@ const labSchema = new mongoose.Schema(
       required:true,
     },
     duration: {
-      type: String, // or use Date if it's a date-time
+      type: String, // in minutes
       required: true,
     },
-    description: {
-      type: String,
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Faculty", 
+      required: true,
     },
-    // createdBy: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User", // Assuming you have a User model
-    //   required: true,
-    // },
     studentsEnrolled: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Student",
       },
     ],
   },
