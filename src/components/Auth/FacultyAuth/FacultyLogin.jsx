@@ -3,12 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthIndicator from "../PasswordStrengthIndicator";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { useAuth } from "../../../context/AuthContext";
 
 const FacultyLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const {storeTokenInLS } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +31,7 @@ const FacultyLogin = () => {
       setTimeout(() => {
         setLoading(false);
         if (response.data.faculty.success) {
+          storeTokenInLS(response.data.faculty.token);
           navigate("/faculty/dashboard");
         } else {
           setError(response.data.message||"Invalid email or password.");

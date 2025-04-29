@@ -27,8 +27,7 @@ import { EditorProvider } from "./context/EditorContext";
 import { InputProvider } from "./context/InputContext";
 import { OutputProvider } from "./context/OutputContext";
 import { ExecutionProvider } from "./context/ExecutionContext";
-import { FacultyAuthProvider } from "./context/FacultyAuthProvider";
-import { StudentAuthProvider } from "./context/StudentAuthProvider";
+import { AuthProvider } from "./context/AuthContext";
 
 // Layout for landing pages (with Navbar & Footer)
 const LandingLayout = () => (
@@ -55,52 +54,70 @@ const StudentLayout = () => (
 
 const App = () => {
   return (
-
-      <FacultyAuthProvider>
-        <StudentAuthProvider>
-      <LabScheduleProvider>
-        <EditorProvider>
-          <InputProvider>
-            <OutputProvider>
-              <ExecutionProvider>
+    <AuthProvider>
+          <LabScheduleProvider>
+            <EditorProvider>
+              <InputProvider>
+                <OutputProvider>
+                  <ExecutionProvider>
                     <Routes>
                       {/* Landing Pages */}
                       <Route element={<LandingLayout />}>
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/resources" element={<Resources />} />
-                        <Route path="/student-login" element={<StudentLogin />} />
-                        <Route path="/faculty-login" element={<FacultyLogin />} />
-                        <Route path="/faculty-signup" element={<FacultySignup />} />
-                        <Route path="student-signup" element={<StudentSignup />} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route
+                          path="/student-login"
+                          element={<StudentLogin />}
+                        />
+                        <Route
+                          path="/faculty-login"
+                          element={<FacultyLogin />}
+                        />
+                        <Route
+                          path="/faculty-signup"
+                          element={<FacultySignup />}
+                        />
+                        <Route
+                          path="student-signup"
+                          element={<StudentSignup />}
+                        />
+                        <Route
+                          path="/forgot-password"
+                          element={<ForgotPassword />}
+                        />
                       </Route>
 
                       {/* Faculty Dashboard & Related Pages */}
                       <Route path="/faculty" element={<FacultyLayout />}>
-                        <Route path="dashboard" element={<FacultyDashboard />} />
+                        <Route
+                          path="dashboard"
+                          element={<FacultyDashboard />}
+                        />
                         <Route path="labschedule" element={<LabSchedule />} />
                         <Route path="schedule-lab" element={<ScheduleLab />} />
                       </Route>
 
                       {/* Student Dashboard & Related Pages */}
                       <Route path="/student" element={<StudentLayout />}>
-                        <Route path="dashboard" element={<StudentDashboard />} />
+                        <Route
+                          path="dashboard"
+                          element={<StudentDashboard />}
+                        />
                       </Route>
 
                       {/* Code Editor Route */}
-                      <Route path="/code-editor/:labId" element={<CodeEditor />} />
-                      
-                      
+                      <Route
+                        path="/code-editor/:labId"
+                        element={<CodeEditor />}
+                      />
                     </Routes>
-              </ExecutionProvider>
-            </OutputProvider>
-          </InputProvider>
-        </EditorProvider>
-      </LabScheduleProvider>
-      </StudentAuthProvider>
-      </FacultyAuthProvider>
-    
+                  </ExecutionProvider>
+                </OutputProvider>
+              </InputProvider>
+            </EditorProvider>
+          </LabScheduleProvider>
+    </AuthProvider>
   );
 };
 

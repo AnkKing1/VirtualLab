@@ -1,17 +1,18 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Logout from "../Auth/Logout";
 
 const FacultyNavbar = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Perform any logout actions (clear session, etc.)
-    const confirmLogout = window.confirm("Are you sure you want to log out?");
-    if (confirmLogout) {
-      // Redirect to login page
-      navigate("/");
-    } // Navigate to the home/landing page
-  };
+  // const handleLogout = () => {
+  //   // Perform any logout actions (clear session, etc.)
+  //   const confirmLogout = window.confirm("Are you sure you want to log out?");
+  //   if (confirmLogout) {
+  //     // Redirect to login page
+  //     navigate("/");
+  //   } // Navigate to the home/landing page 
+  // };
 
   return (
     <nav className="bg-blue-700 text-white py-4 px-6 shadow-lg">
@@ -38,12 +39,13 @@ const FacultyNavbar = () => {
           </Link>
 
           {/* Logout Button */}
-          <button
+          {/* <button
             onClick={handleLogout}
             className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-md font-medium transition"
           >
             Logout
-          </button>
+          </button> */}
+          <Logout/>
         </div>
       </div>
     </nav>

@@ -3,12 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthIndicator from "../PasswordStrengthIndicator";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { useAuth } from "../../../context/AuthContext";
 
 const StudentLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const {storeTokenInLS} = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,12 +24,14 @@ const StudentLogin = () => {
     setLoading(true);
 
     try {
+      setLoading(true);
       const response = await axios.post("http://localhost:5000/api/v1/student/login",{... formData});
       console.log(response);
+      setLoading(false);
 
       setTimeout(() => {
-        setLoading(false);
         if (response.data.student.success) {
+          storeTokenInLS(response.data.student.token);
           navigate("/student/dashboard");
         } else {
           setError(response.data.message||"Invalid email or password.");

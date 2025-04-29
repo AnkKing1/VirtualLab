@@ -130,7 +130,7 @@ export const forgotPassword = async (req, res) => {
     // 3. Check password strength (basic length check, you can improve)
     if (newPassword.length < 8) {
       return res.status(400).json({ success: false, message: "Password must be at least 8 characters." });
-    }
+    } 
 
     // 4. Hash the new password
     const salt = await bcrypt.genSalt(10);

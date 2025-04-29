@@ -1,29 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useStudentAuth } from "../../context/StudentAuthProvider";
-import { useFacultyAuth } from "../../context/FacultyAuthProvider";
+import { useAuth } from "../../context/AuthContext";
 
 const Logout = () => {
-  const { logout: studentLogout, student } = useStudentAuth();
-  const { logout: facultyLogout, faculty } = useFacultyAuth();
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const {LogoutUser} = useAuth();
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
       setLoading(true);
-
+      
       setTimeout(() => {
-        if (student) {
-          studentLogout(); // Logout for student
-        } else if (faculty) {
-          facultyLogout(); // Logout for faculty
-        }
+        LogoutUser();
+        setLoading(false);
         navigate("/");
       }, 1000);
-    }
+    } 
   };
+
 
   return (
     <button
