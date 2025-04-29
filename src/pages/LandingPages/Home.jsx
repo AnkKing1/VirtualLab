@@ -35,7 +35,7 @@ const Home = () => {
               Welcome to Virtual College Lab 
             </h1>
             <p className="text-xl md:text-2xl mb-10 text-gray-200">
-              Experience next-generation learning with our state-of-the-art virtual lab this is good  laboratory platform
+              Experience next-generation learning with our state-of-the-art virtual lab laboratory platform
             </p>
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <Link
