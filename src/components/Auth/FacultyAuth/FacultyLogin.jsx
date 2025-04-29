@@ -31,8 +31,9 @@ const FacultyLogin = () => {
       setTimeout(() => {
         setLoading(false);
         if (response.data.faculty.success) {
+          const facultyId = response.data.faculty.id;
           storeTokenInLS(response.data.faculty.token);
-          navigate("/faculty/dashboard");
+          navigate(`/faculty/dashboard/${facultyId}`);
         } else {
           setError(response.data.message||"Invalid email or password.");
         }

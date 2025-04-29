@@ -5,9 +5,14 @@ import CompletedLabSection from "../../components/Common/CompletedLabsSection";
 import ActiveLabSection from "../../components/Common/ActiveLabSection";
 import Footer from "../LandingPages/Footer";
 import { LabScheduleContext } from "../../context/LabScheduleContext";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+
 
 const StudentDashboard = () => {
+  const {studentId} = useParams();
   const [student, setStudent] = useState({});
+  const [error, setError] = useState("");
   const { scheduledLabs } = useContext(LabScheduleContext);
   const today = new Date();
   const activeLabs = scheduledLabs.filter((lab) => new Date(lab.date) >= today);
@@ -17,19 +22,41 @@ const StudentDashboard = () => {
     performance: 0
   });
 
+  
+  
+  
   useEffect(() => {
-    // Fetch student details from local storage
-    const storedStudent = JSON.parse(localStorage.getItem("student"));
-    if (storedStudent) {
-      setStudent(storedStudent);
-    }
+    const fetchStudent = async () => {
+      try {
 
-    // Fetch student stats (assumed stored in local storage)
-    const storedStats = JSON.parse(localStorage.getItem("studentStats"));
-    if (storedStats) {
-      setStats(storedStats);
+        const token = localStorage.getItem("token");
+
+      const res = await axios.get(
+        `/api/v1/student/${studentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+        
+        if (res.data?.success && res.data.student) {
+          setStudent(res.data.student);
+          setError(""); // Clear any previous errors
+        } else {
+          setError("Student not found.");
+          console.error("Student not found or error occurred.");
+        }
+      } catch (err) {
+        setError("Failed to fetch student.");
+        console.error("API error:", err);
+      }
+    };
+    if (studentId) {
+      fetchStudent();
     }
-  }, []);
+  }, [studentId]);
+  
 
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -53,10 +80,11 @@ const StudentDashboard = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-white rounded-full animate-pulse"></div>
                 <img
-                  src={student.profileImage || "../../public/Student.jpeg"}
+                  src={"../../public/Student.jpeg"}
                   alt="Student"
                   className="relative w-24 h-24 rounded-full border-4 border-white shadow-md"
                 />
+                {/* student.profileImage ||  */}
               </div>
               <div className="text-center md:text-left">
                 <h1 className="text-2xl md:text-3xl font-bold text-white">
@@ -67,7 +95,7 @@ const StudentDashboard = () => {
                     <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                     </svg>
-                    Roll Number: {student.rollNumber}
+                    Roll Number: {student.registrationNumber}
                   </p>
                   <p className="flex items-center justify-center md:justify-start">
                     <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">

@@ -110,6 +110,23 @@ export const getAllFaculties = async (req, res) => {
   }
 };
 
+//get a single faculty data
+export const getSingleFaculty = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const faculty = await Faculty.findById(id).select("-password"); // Hide password
+
+    if (!faculty) {
+      return res.status(404).json({ success: false, message: "Faculty not found" });
+    }
+
+    res.status(200).json({ success: true, faculty });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
 //forgot password
 export const forgotPassword = async (req, res) => {
   const { email, newPassword, confirmNewPassword } = req.body;

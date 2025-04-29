@@ -130,6 +130,23 @@ export const getAllStudents = async (req, res) => {
       .status(500)
       .json({ message: "Failed to fetch students", error: error.message });
   }
+}; 
+
+//Get a single student
+export const getSingleStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const student = await Student.findById(id).select("-password"); // Hide password
+
+    if (!student) {
+      return res.status(404).json({ success: false, message: "Student not found" });
+    }
+
+    res.status(200).json({ success: true, student });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
 };
 
 export const forgotPassword = async (req, res) => {

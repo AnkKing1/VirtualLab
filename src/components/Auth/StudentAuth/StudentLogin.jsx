@@ -27,12 +27,16 @@ const StudentLogin = () => {
       setLoading(true);
       const response = await axios.post("api/v1/student/login",{... formData});
       console.log(response);
+      
       setLoading(false);
 
       setTimeout(() => {
         if (response.data.student.success) {
+          const studentId = response.data.student.id;
           storeTokenInLS(response.data.student.token);
-          navigate("/student/dashboard");
+          console.log(studentId);
+
+          navigate(`/student/dashboard/${studentId}`);
         } else {
           setError(response.data.message||"Invalid email or password.");
         }

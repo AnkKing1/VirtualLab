@@ -1,5 +1,6 @@
 import express from 'express';
-import { registerStudent, loginStudent, getAllStudents, forgotPassword, enrollStudent } from '../controllers/studentController.js';
+import { registerStudent, loginStudent, getAllStudents,getSingleStudent, forgotPassword, enrollStudent } from '../controllers/studentController.js';
+import { authenticateStudent } from '../Middlewares/authMiddleware.js';
 
 const studentRouter = express.Router();
 
@@ -11,6 +12,10 @@ studentRouter.post('/login', loginStudent);
 
 // Get all students
 studentRouter.get('/get-students', getAllStudents);
+
+// Get student data
+studentRouter.get('/:id',authenticateStudent, getSingleStudent
+);
 
 //forgot password
 studentRouter.patch('/forgot-password',forgotPassword);

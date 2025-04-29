@@ -91,7 +91,7 @@ const App = () => {
                       {/* Faculty Dashboard & Related Pages */}
                       <Route path="/faculty" element={<FacultyLayout />}>
                         <Route
-                          path="dashboard"
+                          path="dashboard/:facultyId"
                           element={<FacultyDashboard />}
                         />
                         <Route path="labschedule" element={<LabSchedule />} />
@@ -101,7 +101,7 @@ const App = () => {
                       {/* Student Dashboard & Related Pages */}
                       <Route path="/student" element={<StudentLayout />}>
                         <Route
-                          path="dashboard"
+                          path="dashboard/:studentId"
                           element={<StudentDashboard />}
                         />
                       </Route>

@@ -3,17 +3,49 @@ import FacultyNavbar from "../../components/FacultyComponent/FacultyNavbar";
 import LabSchedule from "../../components/FacultyComponent/LabSchedule";
 import ScheduledLab from "../../components/FacultyComponent/ScheduledLab";
 import Footer from "../LandingPages/Footer";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const FacultyDashboard = () => {
+  
   const [faculty, setFaculty] = useState({});
+  const {facultyId} = useParams();
+  const [error, setError] = useState("");
 
+  console.log(facultyId);
   useEffect(() => {
-    // Fetch faculty data from local storage
-    const storedFaculty = localStorage.getItem("faculty");
-    if (storedFaculty) {
-      setFaculty(JSON.parse(storedFaculty));
+    const fetchFaculty = async () => {
+      try {
+
+        const token = localStorage.getItem("token");
+
+      const res = await axios.get(
+        `/api/v1/faculty/${facultyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+        
+        if (res.data?.success && res.data.faculty) {
+          setFaculty(res.data.faculty);
+          setError(""); // Clear any previous errors
+        } else {
+          setError("Faculty not found.");
+          console.error("Faculty not found or error occurred.");
+        }
+      } catch (err) {
+        setError("Failed to fetch faculty.");
+        console.error("API error:", err);
+      }
+    };
+    if (facultyId) {
+      fetchFaculty();
     }
-  }, []);
+  }, [facultyId]);
+
+  console.log(faculty);
 
   const [showLabSchedule, setShowLabSchedule] = useState(false);
 
