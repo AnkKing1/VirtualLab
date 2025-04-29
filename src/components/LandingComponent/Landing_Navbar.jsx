@@ -13,6 +13,11 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center p-4">
         
         {/* Logo */}
+
+        <div className="text-2xl font-bold">
+          <Link to="/">Virtual Lab</Link>
+        </div>
+
         <Link to="/" className="text-3xl font-bold text-purple-600 tracking-wide">
           Virtual Lab
         </Link>

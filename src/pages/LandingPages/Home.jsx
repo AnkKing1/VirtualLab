@@ -32,10 +32,10 @@ const Home = () => {
             className="max-w-4xl"
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
-              Welcome to Virtual College Lab
+              Welcome to Virtual College Lab 
             </h1>
             <p className="text-xl md:text-2xl mb-10 text-gray-200">
-              Experience next-generation learning with our state-of-the-art virtual laboratory platform
+              Experience next-generation learning with our state-of-the-art virtual lab this is good  laboratory platform
             </p>
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <Link
