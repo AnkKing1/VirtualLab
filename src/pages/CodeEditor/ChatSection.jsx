@@ -27,7 +27,7 @@ export default function ChatSection() {
 
   return (
     <Card className="bg-gray-800 p-4 text-white rounded-lg shadow-lg flex flex-col h-full">
-      <h3 className="text-lg font-semibold">Chatter</h3>
+      <h3 className="text-lg font-semibold">ankit chatter</h3>
       <ScrollArea className="flex-1 bg-black p-2 rounded-lg mt-2 text-gray-300 overflow-y-auto">
         {messages.map((msg, index) => (
           <div key={index} className={`mt-2 p-2 rounded-lg ${msg.sender === "Student" ? "bg-blue-500" : "bg-green-500"}`}>
