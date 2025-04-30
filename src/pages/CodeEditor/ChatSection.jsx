@@ -38,7 +38,7 @@ export default function ChatSection() {
       <div className="mt-2 flex">
         <Input
           className="flex-1 bg-black text-white p-2"
-          placeholder="Type a message....."
+          placeholder="Enter message"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
