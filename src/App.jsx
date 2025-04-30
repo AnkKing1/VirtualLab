@@ -18,8 +18,7 @@ import StudentSignup from "./components/Auth/StudentAuth/StudentSignup";
 import ForgotPassword from "./components/Auth/ForgetPassword";
 import FacultyDashboard from "./pages/FacultyDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
-import ScheduleLab from "./components/FacultyComponent/ScheduledLab";
-import LabSchedule from "./components/FacultyComponent/LabSchedule";
+import EnrolledStudentList from "./components/FacultyComponent/EnrolledStudentList"
 import CodeEditor from "./pages/CodeEditor/CodeEditor"; // Added CodeEditor
 
 // Context Providers
@@ -29,6 +28,8 @@ import { InputProvider } from "./context/InputContext";
 import { OutputProvider } from "./context/OutputContext";
 import { ExecutionProvider } from "./context/ExecutionContext";
 import { AuthProvider } from "./context/AuthContext";
+import StudentNavbar from "./components/StudentComponent/StudentNavbar";
+import FacultyNavbar from "./components/FacultyComponent/FacultyNavbar";
 
 // Layout for landing pages (with Navbar & Footer)
 const LandingLayout = () => (
@@ -42,14 +43,18 @@ const LandingLayout = () => (
 // Layout for faculty-related routes
 const FacultyLayout = () => (
   <div>
+    <FacultyNavbar/>
     <Outlet />
+    <Footer/>
   </div>
 );
 
 // Layout for student-related routes
 const StudentLayout = () => (
   <div>
+    <StudentNavbar/>
     <Outlet />
+    <Footer/>
   </div>
 );
 
@@ -95,8 +100,10 @@ const App = () => {
                           path="dashboard/:facultyId"
                           element={<FacultyDashboard />}
                         />
-                        <Route path="labschedule" element={<LabSchedule />} />
-                        <Route path="schedule-lab" element={<ScheduleLab />} />
+                        <Route
+                        path ="EnrolledStudentList/:id"
+                        element={<EnrolledStudentList/>}
+                        />
                       </Route>
 
                       {/* Student Dashboard & Related Pages */}

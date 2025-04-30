@@ -101,16 +101,46 @@ export const getLabById = async (req, res) => {
   }
 };
 
+// all labs created by 
+export const getLabsByFacultyId = async (req, res) => {
+  try {
+    const { facultyId } = req.query;
+    const Id = new mongoose.Types.ObjectId(facultyId);
+    console.log("Received facultyId:", facultyId); // ✅ log it
+
+    if (!facultyId) {
+      return res.status(400).json({ message: "facultyId is required" });
+    }
+
+    const labs = await Lab.find({ createdBy: Id }).populate(
+      "createdBy",
+      "name email"
+    );
+
+    return res.status(200).json({
+      success: true,
+      labs,
+    });
+  } catch (error) {
+    console.error("Error in getLabsByFacultyId:", error); // ✅ more descriptive
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+
 // Update a Lab
 export const updateLab = async (req, res) => {
   try {
     const labId = req.params.id;
     const updateData = req.body;
-
+    
+    console.log(updateData);
     const updatedLab = await Lab.findByIdAndUpdate(labId, updateData, {
       new: true,
       runValidators: true,
     });
+
 
     if (!updatedLab) {
       return res.status(404).json({ message: "Lab not found" });

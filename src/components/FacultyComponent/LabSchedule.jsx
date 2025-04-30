@@ -1,9 +1,28 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom"; // ✅ get facultyId from URL
+import { useParams } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion";
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const formItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.4 },
+  }),
+};
 
 const LabSchedule = () => {
-  const { facultyId } = useParams(); // ✅ /faculty/dashboard/:facultyId
+  const { facultyId } = useParams();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -29,29 +48,16 @@ const LabSchedule = () => {
 
     try {
       const schedule = new Date(`${date}T${time}`);
-
-      console.log(schedule);
-      console.log(facultyId);
-
       const labData = {
         title,
         description,
         semester,
         schedule,
-        duration:Number(duration),
-        createdBy: facultyId, // ✅ Inject from URL param
+        duration: Number(duration),
+        createdBy: facultyId,
       };
 
-      console.log(labData); 
-
-      const response = await axios.post("/api/v1/labs/create",labData
-        // {
-        // headers: {
-        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
-        // },
-      );
-
-      console.log(response);
+      const response = await axios.post("/api/v1/labs/create", labData);
 
       if (response.data.success) {
         alert("Lab scheduled successfully!");
@@ -73,107 +79,137 @@ const LabSchedule = () => {
   };
 
   return (
-  <div className="min-h-screen bg-gray-100 p-6">
-  <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-    <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Schedule a New Lab</h2>
-
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">Title</label>
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
-          placeholder="Enter Lab Name"
-          required
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
-          placeholder="Enter Statement or Question"
-          rows="4"
-          required
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Time</label>
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Duration (minutes)</label>
-          <input
-            type="number"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
-            placeholder="Enter duration in minutes"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Semester</label>
-          <select
-            name="semester"
-            value={formData.semester}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
-            required
-          >
-            <option value="">Select Semester</option>
-            <option value="1st">1st Semester</option>
-            <option value="2nd">2nd Semester</option>
-            <option value="3rd">3rd Semester</option>
-            <option value="4th">4th Semester</option>
-            <option value="5th">5th Semester</option>
-            <option value="6th">6th Semester</option>
-            <option value="7th">7th Semester</option>
-            <option value="8th">8th Semester</option>
-          </select>
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
+    <motion.div
+      className="min-h-screen bg-gray-100 p-6"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <motion.div
+        className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
       >
-        Add Lab Schedule
-      </button>
-    </form>
-  </div>
-</div>
-);
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Schedule a New Lab
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {[
+            {
+              label: "Title",
+              name: "title",
+              type: "text",
+              placeholder: "Enter Lab Name",
+            },
+            {
+              label: "Description",
+              name: "description",
+              type: "textarea",
+              placeholder: "Enter Statement or Question",
+              rows: 4,
+            },
+          ].map((field, index) => (
+            <motion.div key={field.name} custom={index} variants={formItemVariants} initial="hidden" animate="visible">
+              <label className="block text-sm font-semibold text-gray-700 mb-1">{field.label}</label>
+              {field.type === "textarea" ? (
+                <textarea
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
+                  placeholder={field.placeholder}
+                  rows={field.rows}
+                  required
+                />
+              ) : (
+                <input
+                  type={field.type}
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
+                  placeholder={field.placeholder}
+                  required
+                />
+              )}
+            </motion.div>
+          ))}
+
+          {/* Date & Time */}
+          <div className="grid grid-cols-2 gap-4">
+            {["date", "time"].map((name, index) => (
+              <motion.div key={name} custom={index + 2} variants={formItemVariants} initial="hidden" animate="visible">
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  {name.charAt(0).toUpperCase() + name.slice(1)}
+                </label>
+                <input
+                  type={name}
+                  name={name}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
+                  required
+                />
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Duration & Semester */}
+          <div className="grid grid-cols-2 gap-4">
+            <motion.div custom={4} variants={formItemVariants} initial="hidden" animate="visible">
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Duration (minutes)</label>
+              <input
+                type="number"
+                name="duration"
+                value={formData.duration}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
+                placeholder="Enter duration"
+                required
+              />
+            </motion.div>
+
+            <motion.div custom={5} variants={formItemVariants} initial="hidden" animate="visible">
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Semester</label>
+              <select
+                name="semester"
+                value={formData.semester}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
+                required
+              >
+                <option value="">Select Semester</option>
+                {[...Array(8)].map((_, i) => {
+                  const num = i + 1;
+                  const suffix = 
+                    num === 1 ? "st" :
+                    num === 2 ? "nd" :
+                    num === 3 ? "rd" : "th";
+
+                  return (
+                    <option key={num} value={`${num}${suffix}`}>
+                      {num}{suffix} Semester
+                    </option>
+                  );
+                })}
+              </select>
+            </motion.div>
+          </div>
+
+          <motion.button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            Add Lab Schedule
+          </motion.button>
+        </form>
+      </motion.div>
+    </motion.div>
+  );
 };
 
 export default LabSchedule;
