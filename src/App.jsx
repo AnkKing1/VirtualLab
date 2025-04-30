@@ -22,7 +22,6 @@ import EnrolledStudentList from "./components/FacultyComponent/EnrolledStudentLi
 import CodeEditor from "./pages/CodeEditor/CodeEditor"; // Added CodeEditor
 
 // Context Providers
-import { LabScheduleProvider } from "./context/LabScheduleContext";
 import { EditorProvider } from "./context/EditorContext";
 import { InputProvider } from "./context/InputContext";
 import { OutputProvider } from "./context/OutputContext";
@@ -61,7 +60,6 @@ const StudentLayout = () => (
 const App = () => {
   return (
     <AuthProvider>
-          <LabScheduleProvider>
             <EditorProvider>
               <InputProvider>
                 <OutputProvider>
@@ -112,19 +110,18 @@ const App = () => {
                           path="dashboard/:studentId"
                           element={<StudentDashboard />}
                         />
-                      </Route>
 
-                      {/* Code Editor Route */}
-                      <Route
-                        path="/code-editor/:labId"
-                        element={<CodeEditor />}
-                      />
+                      </Route>
+                        <Route
+                          path="/code-editor/:labId"
+                          element={<CodeEditor />}
+                        />
+
                     </Routes>
                   </ExecutionProvider>
                 </OutputProvider>
               </InputProvider>
             </EditorProvider>
-          </LabScheduleProvider>
     </AuthProvider>
   );
 };

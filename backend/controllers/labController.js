@@ -43,15 +43,15 @@ export const createLab = async (req, res) => {
 
 export const getLabBySem = async (req, res) => {
   try {
-    const { semester } = req.body;
+    const { semester } = req.query;
 
-    const lab = await Lab.find({ semester });
+    const lab = await Lab.find({ semester }).populate("createdBy", "name email") ;
     console.log("lab", lab);
     if (!lab) {
       return res.json({
         success: false,
         message: "No lab scheduled yet",
-      });
+      }); 
     }
 
     return res.json({
