@@ -4,22 +4,12 @@ const CodeEditorSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',   // reference to the user who wrote the code
+
+  },
+  labId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'lab',   // reference to the user who wrote the code
     required: true,
-  },
-  title: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'lab',   // reference to the lab title
-    required: true,
-  },
-  description:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'lab', // refrence to lab description
-    required:true,
-  },
-  duration:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'lab', // refrence to lab duration
-    required:true,
   },
   language: {
     type: String,
@@ -30,6 +20,7 @@ const CodeEditorSchema = new mongoose.Schema({
   theme: {
     type: String,
     default: 'light', // or 'dark' based on your editor
+    required:true,
   },
   code: {
     type: String,
@@ -39,6 +30,7 @@ const CodeEditorSchema = new mongoose.Schema({
   input: {
     type: String,
     default: '',
+    required:true,
   },
   output: {
     type: String,
