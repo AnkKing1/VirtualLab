@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import CodeMirror from '@uiw/react-codemirror';
@@ -21,17 +21,17 @@ const languageExtensions = {
 const CodeEditor = () => {
   const { labId, studentId } = useParams();
   const [labDetails, setLabDetails] = useState(null);
-  const [language, setLanguage] = useState('javascript');
+  const [language, setLanguage] = useState('cpp');
   const [student, setStudent] = useState(null);
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
   const [code, setCode] = useState('');
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(true);
   const [remainingTime, setRemainingTime] = useState(0);
 
-  // Socket.IO client connection
-  const socket = io('http://localhost:5000');  // Update the URL to your backend WebSocket server
+
+ 
 
   useEffect(() => {
     if (labDetails?.duration) {
@@ -89,32 +89,50 @@ const CodeEditor = () => {
     if (labId) fetchLabDetails();
   }, [labId]);
 
+  const socketRef = useRef(null);
+  // Setup socket connection once
   useEffect(() => {
-    // Listen for code execution results from the backend
-    socket.on('code-executed', (data) => {
-      setOutput(data.output || 'No output');
+    socketRef.current = io('http://localhost:5000'); // Connect once
+
+    socketRef.current.on('connect', () => {
+      console.log("✅ Connected:", socketRef.current.id);
     });
 
-    socket.on('execution-error', (data) => {
+    socketRef.current.on('code-executed', (data) => {
+      console.log(data);
+      setOutput(data.output || 'No output');
+      setLoading(false);
+    });
+
+    socketRef.current.on('execution-error', (data) => {
       setOutput(data.error || 'Error executing code.');
+      setLoading(false);
+    });
+
+    socketRef.current.on('connect_error', (err) => {
+      console.error("❌ Connection error:", err.message);
     });
 
     return () => {
-      socket.off('code-executed');
-      socket.off('execution-error');
+      socketRef.current.disconnect(); // Clean up on unmount
     };
   }, []);
-
-  if (loading) return <div>Loading...</div>;
+  
+    if (loading) return <div>Running your code...</div>;
 
   const runCode = () => {
-    // Emit the execute-code event to the backend
-    socket.emit('execute-code', {
+    // setLoading(true);
+
+    if (!code || !language || !labId || !studentId) {
+      console.log("Missing data, cannot run code!");
+      return;
+    }
+    socketRef.current.emit('execute-code', {
       code,
       input,
       language,
       labId,
-      studentId, // Use the actual studentId
+      studentId, // Match backend
     });
   };
 

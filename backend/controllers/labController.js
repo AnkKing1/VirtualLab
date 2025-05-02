@@ -1,6 +1,7 @@
 import Lab from "../models/labModel.js";
 import mongoose from 'mongoose'
 
+console
 
 // Create a new Lab
 export const createLab = async (req, res) => {
@@ -46,7 +47,7 @@ export const getLabBySem = async (req, res) => {
     const { semester } = req.query;
 
     const lab = await Lab.find({ semester }).populate("createdBy", "name email") ;
-    console.log("lab", lab);
+    // console.log("lab", lab);
     if (!lab) {
       return res.json({
         success: false,
@@ -129,14 +130,13 @@ export const getLabsByFacultyId = async (req, res) => {
 };
 
 
-
 // Update a Lab
 export const updateLab = async (req, res) => {
   try {
     const labId = req.params.id;
     const updateData = req.body;
     
-    console.log(updateData);
+    // console.log(updateData);
     const updatedLab = await Lab.findByIdAndUpdate(labId, updateData, {
       new: true,
       runValidators: true,

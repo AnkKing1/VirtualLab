@@ -7,14 +7,13 @@ import CodeEditor from '../models/codeEditorModel.js';
 const TEMP_DIR = path.join(process.cwd(), 'temp-code');
 if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR);
 
-export const executeCode = async (req, res) => {
-  const { code, input = '', language, labId, studentId } = req.body;
+export const executeCode = ({ code, input = '', language, labId, studentId }) => {
+  return new Promise((resolve, reject) => {
+    const sessionId = uuid();
 
-  const sessionId = uuid();
-  const codeFile = path.join(TEMP_DIR, `${sessionId}.${language === 'cpp' ? 'cpp' : language}`);
-  const inputFile = path.join(TEMP_DIR, `${sessionId}.txt`);
+    const codeFile = path.join(TEMP_DIR, `${sessionId}.${language === 'cpp' ? 'cpp' : language}`);
+    const inputFile = path.join(TEMP_DIR, `${sessionId}.txt`);
 
-  try {
     fs.writeFileSync(codeFile, code);
     fs.writeFileSync(inputFile, input);
 
@@ -24,23 +23,19 @@ export const executeCode = async (req, res) => {
       const finalOutput = error ? (stderr || error.message) : stdout;
 
       try {
-        const saved = await CodeEditor.create({
+        await CodeEditor.create({
           studentId,
           labId,
           language,
           code,
           input,
-          output: finalOutput
+          output: finalOutput,
         });
-        console.log('Code execution saved:', saved._id);
       } catch (dbErr) {
         console.error('Error saving to DB:', dbErr.message);
       }
 
-      return res.json({ output: finalOutput });
+      resolve(finalOutput); // ✅ This allows 'await executeCode(...)' to receive the output
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  });
 };
