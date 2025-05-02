@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 
 const CodeEditorSchema = new mongoose.Schema({
-  userId: {
+  studentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',   // reference to the user who wrote the code
+    ref: 'Student',   // reference to the user who wrote the code
 
   },
   labId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'lab',   // reference to the user who wrote the code
+    ref: 'Lab',   // reference to the user who wrote the code
     required: true,
   },
   language: {

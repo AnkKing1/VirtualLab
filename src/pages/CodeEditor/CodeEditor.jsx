@@ -10,7 +10,7 @@ import { dracula } from '@uiw/codemirror-theme-dracula';
 import { githubLight } from '@uiw/codemirror-theme-github';
 
 const languageExtensions = {
-  cpp: cpp(),
+  cpp: cpp(), 
   java: java(),
   python: python(),
   javascript: javascript(),

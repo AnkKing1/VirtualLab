@@ -99,7 +99,7 @@ const App = () => {
                           element={<FacultyDashboard />}
                         />
                         <Route
-                        path ="EnrolledStudentList/:id"
+                        path ="EnrolledStudentList/:labId"
                         element={<EnrolledStudentList/>}
                         />
                       </Route>

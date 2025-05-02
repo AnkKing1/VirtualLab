@@ -106,7 +106,7 @@ export const getLabsByFacultyId = async (req, res) => {
   try {
     const { facultyId } = req.query;
     const Id = new mongoose.Types.ObjectId(facultyId);
-    console.log("Received facultyId:", facultyId); // ✅ log it
+    // console.log("Received facultyId:", facultyId); // ✅ log it
 
     if (!facultyId) {
       return res.status(400).json({ message: "facultyId is required" });
@@ -175,5 +175,29 @@ export const deleteLab = async (req, res) => {
   } catch (error) {
     console.error("Error in deleteLab:", error);
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+// to get list of all students
+export const getEnrolledStudentsByLab = async (req, res) => {
+  try {
+    const { labId } = req.params;
+
+
+    const lab = await Lab.findById(labId).populate("studentsEnrolled");
+
+    if (!lab) {
+      return res.status(404).json({ message: "Lab not found" });
+    }
+
+     return res.status(200).json({
+      labTitle: lab.title,
+      totalEnrolled: lab.studentsEnrolled.length,
+      students: lab.studentsEnrolled,
+    });
+  } catch (error) {
+    console.error("Error fetching enrolled students:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
