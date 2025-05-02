@@ -31,3 +31,7 @@ EXPOSE 5000
 
 # Default command when the container starts
 CMD ["npm", "start"]
+
+COPY run.sh /app/run.sh
+RUN chmod +x /app/run.sh
+

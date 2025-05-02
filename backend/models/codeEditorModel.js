@@ -3,25 +3,19 @@ import mongoose from 'mongoose';
 const CodeEditorSchema = new mongoose.Schema({
   studentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Student',   // reference to the user who wrote the code
-
+    ref: 'Student',
   },
   labId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Lab',   // reference to the user who wrote the code
+    ref: 'Lab',
     required: true,
   },
-  language: { 
+  language: {
     type: String,
     required: true,
-    enum: ['cpp', 'java', 'python', 'javascript', 'c', 'go', 'ruby', 'php'], // extend as needed
+    enum: ['cpp', 'java', 'python', 'javascript', 'c', 'go', 'ruby', 'php'],
     default: 'javascript',
   },
-  // theme: {
-  //   type: String,
-  //   default: 'light', // or 'dark' based on your editor
-  //   required:true,
-  // },
   code: {
     type: String,
     required: true,
@@ -30,13 +24,12 @@ const CodeEditorSchema = new mongoose.Schema({
   input: {
     type: String,
     default: '',
-    // required:true,
   },
   output: {
     type: String,
     default: '',
   },
-},{timestamps: true});
+}, { timestamps: true });
 
 const CodeEditor = mongoose.model('CodeEditor', CodeEditorSchema);
 

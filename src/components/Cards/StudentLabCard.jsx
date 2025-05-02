@@ -71,9 +71,9 @@ const StudentLabCard = ({
         <span className="font-semibold">Created by:</span> {facultyName}
       </p>
 
-      <p className="text-gray-600 mb-2">
+      {/* <p className="text-gray-600 mb-2">
         <span className="font-medium">Statement:</span> {statement}
-      </p>
+      </p> */}
 
       <p className="text-gray-600 mb-1">
         <span className="font-medium">Semester:</span> {semester}
