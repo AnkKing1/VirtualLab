@@ -80,12 +80,13 @@ export const getAllLabs = async (req, res) => {
   }
 };
 
-// Get a Lab by ID (createdBy)
+// Get a Lab by ID 
 export const getLabById = async (req, res) => {
   try {
     const labId = req.params.id;
-
-    const lab = await Lab.findById(labId).populate("createdBy", "name email");
+    const Id = new mongoose.Types.ObjectId(labId);
+    console.log(Id);
+    const lab = await Lab.findById({_id : Id}).populate("createdBy", "name email");
 
     if (!lab) {
       return res.status(404).json({ message: "Lab not found" });

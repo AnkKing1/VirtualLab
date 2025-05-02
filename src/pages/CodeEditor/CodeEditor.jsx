@@ -8,35 +8,91 @@ import { python } from '@codemirror/lang-python';
 import { javascript } from '@codemirror/lang-javascript';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { githubLight } from '@uiw/codemirror-theme-github';
+import axios from 'axios';
 
 const languageExtensions = {
   cpp: cpp(), 
   java: java(),
-  python: python(),
+  python: python(), 
   javascript: javascript(),
 };
 
 const CodeEditor = () => {
-  const { labId } = useParams();
+  const { labId, studentId} = useParams();
   const [labDetails, setLabDetails] = useState(null);
   const [language, setLanguage] = useState('javascript');
+  const [student,setStudent] = useState(null);
   const [theme, setTheme] = useState('light');
   const [code, setCode] = useState('');
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
+  const [loading,setLoading] =useState(true);
+  const [remainingTime, setRemainingTime] = useState(0);
+
+  
+  useEffect(() => {
+    if (labDetails?.duration) {
+      const start = Date.now(); // Current time when page loads
+      const end = start + labDetails.duration * 60 * 1000;
+  
+      const interval = setInterval(() => {
+        const now = Date.now();
+        const diff = Math.max(Math.floor((end - now) / 1000), 0); // in seconds
+        setRemainingTime(diff);
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }
+  }, [labDetails]);
 
   useEffect(() => {
-    const fetchLab = async () => {
+    const fetchStudent = async () => {
       try {
-        const res = await fetch(`/api/labs/${labId}`);
-        const data = await res.json();
-        setLabDetails(data);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No auth token found");
+          return;
+        }
+  
+        const res = await axios.get(`/api/v1/student/${studentId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (res.data?.success && res.data.student) {
+          setStudent(res.data.student);
+        } else {
+          console.error("Student data not found");
+        }
       } catch (err) {
-        console.error('Error fetching lab:', err);
+        console.error("Error loading student:", err);
       }
     };
-    if (labId) fetchLab();
+  
+    if (studentId) fetchStudent();
+  }, [studentId]);
+  
+
+
+  useEffect(() => {
+    const fetchLabDetails = async () => {
+      try {
+        const res = await axios.get(`/api/v1/labs/${labId}`);
+        setLabDetails(res.data.lab);
+      } catch (err) {
+        console.error("Error fetching lab:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (labId) fetchLabDetails();
   }, [labId]);
+
+  if (loading) return <div>Loading...</div>;
+
+  
 
   const runCode = async () => {
     try {
@@ -55,23 +111,63 @@ const CodeEditor = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6 text-gray-900 dark:text-white">
-      {/* Lab Info */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow mb-6"
-      >
-        <h2 className="text-3xl font-bold mb-2">Lab Details</h2>
-        {labDetails ? (
-          <div className="space-y-1 text-gray-700 dark:text-gray-300">
-            <p><strong>Title:</strong> {labDetails.title}</p>
-            <p><strong>Description:</strong> {labDetails.description}</p>
-          </div>
-        ) : (
-          <p className="text-gray-500 dark:text-gray-400 animate-pulse">Loading lab details...</p>
-        )}
-      </motion.div>
+<motion.div
+  initial={{ opacity: 0, y: -10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6 }}
+  className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow mb-6 relative"
+>
+  {/* Student Info at top-right */}
+  {student && (
+    <div className="absolute top-4 right-6 text-right">
+      <p className="text-3xl mb-3 font-bold ">{student.name}</p>
+      <p className=" font-semibold  text-gray-700 dark:text-gray-300">
+        Reg No: {student.registrationNumber}
+      </p>
+    </div>
+  )}
+
+  {/* Timer below student info */}
+  {remainingTime >= 0 && (
+    <div className="absolute top-14 right-6 text-sm text-white bg-blue-600 px-3 py-1 mt-20 rounded-full shadow">
+      ⏳ {remainingTime > 0
+        ? `${Math.floor(remainingTime / 60)}m ${remainingTime % 60}s`
+        : "Ended"}
+    </div>
+  )}
+
+  {/* Lab Title & Meta Info */}
+  {labDetails ? (
+    <div>
+      <h2 className="text-3xl font-bold mb-4 text-blue-700">{labDetails.title}</h2>
+      <div className="space-y-1 text-gray-700 dark:text-gray-300">
+        <p><strong>Faculty:</strong> {labDetails.createdBy?.name || "N/A"}</p>
+        <p><strong>Semester:</strong> {labDetails.semester}</p>
+        <p>
+          <strong>Scheduled:</strong>{" "}
+          {new Date(labDetails.schedule).toLocaleString()}
+        </p>
+      </div>
+
+      {/* Description Block */}
+      <div className="mt-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner">
+        <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100">
+          Description
+        </h3>
+        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+          {labDetails.description}
+        </p>
+      </div>
+    </div>
+  ) : (
+    <p className="text-gray-500 dark:text-gray-400 animate-pulse">
+      Loading lab details...
+    </p>
+  )}
+</motion.div>
+
+
+
 
       {/* Controls */}
       <motion.div

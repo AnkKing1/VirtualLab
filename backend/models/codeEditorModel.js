@@ -11,17 +11,17 @@ const CodeEditorSchema = new mongoose.Schema({
     ref: 'Lab',   // reference to the user who wrote the code
     required: true,
   },
-  language: {
+  language: { 
     type: String,
     required: true,
     enum: ['cpp', 'java', 'python', 'javascript', 'c', 'go', 'ruby', 'php'], // extend as needed
     default: 'javascript',
   },
-  theme: {
-    type: String,
-    default: 'light', // or 'dark' based on your editor
-    required:true,
-  },
+  // theme: {
+  //   type: String,
+  //   default: 'light', // or 'dark' based on your editor
+  //   required:true,
+  // },
   code: {
     type: String,
     required: true,
@@ -30,7 +30,7 @@ const CodeEditorSchema = new mongoose.Schema({
   input: {
     type: String,
     default: '',
-    required:true,
+    // required:true,
   },
   output: {
     type: String,

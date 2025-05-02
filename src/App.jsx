@@ -113,7 +113,7 @@ const App = () => {
 
                       </Route>
                         <Route
-                          path="/code-editor/:labId"
+                          path="/code-editor/:labId/:studentId"
                           element={<CodeEditor />}
                         />
 
