@@ -273,7 +273,7 @@ const CodeEditor = () => {
               onChange={(e) => setInput(e.target.value)}
               rows={6}
               placeholder="Enter input for your code..."
-              className="w-full text-gray-800 dark:text-white p-3 rounded-xl border dark:border-gray-700"
+              className="w-full bg-gray-600 text-gray-800 dark:text-white p-3 rounded-xl border dark:border-gray-700"
             />
           </motion.div>
 
