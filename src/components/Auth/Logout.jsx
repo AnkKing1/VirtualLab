@@ -2,25 +2,28 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-const Logout = () => {
-
+const Logout = ({ userType }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const {LogoutUser} = useAuth();
+  const { logoutStudent, logoutFaculty, studentToken, facultyToken } = useAuth();
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
       setLoading(true);
-      
-      setTimeout(() => {
-        LogoutUser();
-        setLoading(false);
-        navigate("/");
-      }, 1000);
-    } 
-  };
 
+      setTimeout(() => {
+        if (userType === "student" && studentToken) {
+          logoutStudent();  // Log out student if student token is available
+        } else if (userType === "faculty" && facultyToken) {
+          logoutFaculty();  // Log out faculty if faculty token is available
+        }
+
+        setLoading(false);
+        navigate("/");  // Navigate to home or login page after logout
+      }, 1000);
+    }
+  };
 
   return (
     <button

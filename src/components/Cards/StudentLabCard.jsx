@@ -18,14 +18,28 @@ const StudentLabCard = ({
 
   const handleEnroll = async () => {
     try {
-      const token = localStorage.getItem("token");
-      // const sId = studentId // Add this
+      const token = localStorage.getItem("studentToken");
   
-      if (!token || !studentId) return alert("You must be logged in to enroll.");
+      if (!token || !studentId) {
+        return alert("You must be logged in to enroll.");
+      }
   
-      const res = await axios.patch(
+      // Step 1: Check if the student is already enrolled
+      const checkRes = await axios.get(`/api/v1/labs/${id}`);
+      console.log(checkRes);
+      const enrolledStudents = checkRes.data.lab.studentsEnrolled;
+      console.log(enrolledStudents);
+  
+      if (enrolledStudents.includes(studentId)) {
+        // Already enrolled, navigate directly
+        alert("You are already enrolled.");
+        return navigate(`/code-editor/${id}/${studentId}`);
+      }
+  
+      // Step 2: Enroll the student if not already enrolled
+      const enrollRes = await axios.patch(
         `/api/v1/student/enroll-student/${id}`,
-        { studentId }, // Send studentId in request body
+        { studentId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -33,9 +47,9 @@ const StudentLabCard = ({
         }
       );
   
-      if (res.data.success) {
+      if (enrollRes.data.success) {
         alert("Successfully enrolled in lab!");
-        navigate(`/code-editor/${id}`);
+        navigate(`/code-editor/${id}/${studentId}`);
       } else {
         alert("Enrollment failed. Try again.");
       }
@@ -44,6 +58,7 @@ const StudentLabCard = ({
       alert("Something went wrong. Please try again.");
     }
   };
+  
   
   return (
     <motion.div
@@ -56,9 +71,9 @@ const StudentLabCard = ({
         <span className="font-semibold">Created by:</span> {facultyName}
       </p>
 
-      <p className="text-gray-600 mb-2">
+      {/* <p className="text-gray-600 mb-2">
         <span className="font-medium">Statement:</span> {statement}
-      </p>
+      </p> */}
 
       <p className="text-gray-600 mb-1">
         <span className="font-medium">Semester:</span> {semester}

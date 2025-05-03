@@ -11,7 +11,7 @@ const StudentLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const {storeTokenInLS} = useAuth();
+  const {storeStudentTokenInLS} = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +24,6 @@ const StudentLogin = () => {
     setLoading(true);
 
     try {
-      setLoading(true);
       const response = await axios.post("api/v1/student/login",{... formData});
       console.log(response);
       
@@ -33,16 +32,18 @@ const StudentLogin = () => {
       setTimeout(() => {
         if (response.data.student.success) {
           const studentId = response.data.student.id;
-          storeTokenInLS(response.data.student.token);
+          storeStudentTokenInLS(response.data.student.token);
           console.log(studentId);
 
           navigate(`/student/dashboard/${studentId}`);
         } else {
           setError(response.data.message||"Invalid email or password.");
+          setLoading(false);
         }
       }, 1000);
     } catch (err) {
       console.error(err);
+      setLoading(false);
       setError(err.response?.data?.message || "Server error. Try again later.");
       
     }

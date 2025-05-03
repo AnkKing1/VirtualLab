@@ -16,7 +16,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("studentToken");
 
         const res = await axios.get(`/api/v1/student/${studentId}`, {
           headers: {
@@ -46,7 +46,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchLabs = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("studentToken");
 
         if (!student?.semester) return;
 

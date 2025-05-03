@@ -1,35 +1,20 @@
 import mongoose from 'mongoose';
 
 const CodeEditorSchema = new mongoose.Schema({
-  userId: {
+  studentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',   // reference to the user who wrote the code
+    ref: 'Student',
+  },
+  labId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Lab',
     required: true,
-  },
-  title: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'lab',   // reference to the lab title
-    required: true,
-  },
-  description:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'lab', // refrence to lab description
-    required:true,
-  },
-  duration:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'lab', // refrence to lab duration
-    required:true,
   },
   language: {
     type: String,
     required: true,
-    enum: ['cpp', 'java', 'python', 'javascript', 'c', 'go', 'ruby', 'php'], // extend as needed
+    enum: ['cpp', 'java', 'python', 'javascript', 'c', 'go', 'ruby', 'php'],
     default: 'javascript',
-  },
-  theme: {
-    type: String,
-    default: 'light', // or 'dark' based on your editor
   },
   code: {
     type: String,
@@ -44,7 +29,7 @@ const CodeEditorSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-},{timestamps: true});
+}, { timestamps: true });
 
 const CodeEditor = mongoose.model('CodeEditor', CodeEditorSchema);
 

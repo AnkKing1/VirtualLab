@@ -22,10 +22,6 @@ import EnrolledStudentList from "./components/FacultyComponent/EnrolledStudentLi
 import CodeEditor from "./pages/CodeEditor/CodeEditor"; // Added CodeEditor
 
 // Context Providers
-import { EditorProvider } from "./context/EditorContext";
-import { InputProvider } from "./context/InputContext";
-import { OutputProvider } from "./context/OutputContext";
-import { ExecutionProvider } from "./context/ExecutionContext";
 import { AuthProvider } from "./context/AuthContext";
 import StudentNavbar from "./components/StudentComponent/StudentNavbar";
 import FacultyNavbar from "./components/FacultyComponent/FacultyNavbar";
@@ -60,10 +56,6 @@ const StudentLayout = () => (
 const App = () => {
   return (
     <AuthProvider>
-            <EditorProvider>
-              <InputProvider>
-                <OutputProvider>
-                  <ExecutionProvider>
                     <Routes>
                       {/* Landing Pages */}
                       <Route element={<LandingLayout />}>
@@ -99,29 +91,28 @@ const App = () => {
                           element={<FacultyDashboard />}
                         />
                         <Route
-                        path ="EnrolledStudentList/:id"
+                        path ="EnrolledStudentList/:labId"
                         element={<EnrolledStudentList/>}
                         />
                       </Route>
 
                       {/* Student Dashboard & Related Pages */}
                       <Route path="/student" element={<StudentLayout />}>
+
                         <Route
                           path="dashboard/:studentId"
                           element={<StudentDashboard />}
                         />
 
                       </Route>
+
+                      
                         <Route
-                          path="/code-editor/:labId"
+                          path="/code-editor/:labId/:studentId"
                           element={<CodeEditor />}
                         />
 
                     </Routes>
-                  </ExecutionProvider>
-                </OutputProvider>
-              </InputProvider>
-            </EditorProvider>
     </AuthProvider>
   );
 };

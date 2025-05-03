@@ -8,6 +8,7 @@ import {
   getLabById,
   getLabBySem,
   getLabsByFacultyId,
+  getEnrolledStudentsByLab,
   updateLab,
 } from "../controllers/labController.js";
 // (Optional) Middleware to protect routes (like checking if user is logged in)
@@ -20,6 +21,9 @@ labRouter.get("/get-all-labs", getAllLabs);
 labRouter.get("/get-lab-sem", getLabBySem);
 // get all labs created by faculty
 labRouter.get("/get-labs-byFaculty",getLabsByFacultyId)
+
+//get list of all students
+labRouter.get("/:labId/enrolled-students", getEnrolledStudentsByLab);
 
 // Get a single lab by ID
 labRouter.get("/:id", getLabById);

@@ -151,7 +151,6 @@ export const getSingleStudent = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
   const { email, newPassword, confirmNewPassword } = req.body;
-
   try {
     // 1. Check if student exists
     const student = await Student.findOne({ email });

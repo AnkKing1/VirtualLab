@@ -11,7 +11,7 @@ const FacultyLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const {storeTokenInLS } = useAuth();
+  const {storeFacultyTokenInLS } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,14 +32,16 @@ const FacultyLogin = () => {
         setLoading(false);
         if (response.data.faculty.success) {
           const facultyId = response.data.faculty.id;
-          storeTokenInLS(response.data.faculty.token);
+          storeFacultyTokenInLS(response.data.faculty.token);
           navigate(`/faculty/dashboard/${facultyId}`);
         } else {
+          setLoading(false);
           setError(response.data.message||"Invalid email or password.");
         }
       }, 1000);
     } catch (err) {
       console.error(err);
+      setLoading(false);
       setError(err.response?.data?.message || "Server error. Try again later.");
       
     }

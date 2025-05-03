@@ -49,7 +49,7 @@ const StudentNavbar = () => {
           >
             Logout
           </button> */}
-          <Logout/>
+          <Logout userType="student" />
         </div>
       </div>
     </nav>

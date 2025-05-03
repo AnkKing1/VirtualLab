@@ -1,6 +1,7 @@
 import Lab from "../models/labModel.js";
 import mongoose from 'mongoose'
 
+console
 
 // Create a new Lab
 export const createLab = async (req, res) => {
@@ -46,7 +47,7 @@ export const getLabBySem = async (req, res) => {
     const { semester } = req.query;
 
     const lab = await Lab.find({ semester }).populate("createdBy", "name email") ;
-    console.log("lab", lab);
+    // console.log("lab", lab);
     if (!lab) {
       return res.json({
         success: false,
@@ -80,12 +81,13 @@ export const getAllLabs = async (req, res) => {
   }
 };
 
-// Get a Lab by ID (createdBy)
+// Get a Lab by ID 
 export const getLabById = async (req, res) => {
   try {
     const labId = req.params.id;
-
-    const lab = await Lab.findById(labId).populate("createdBy", "name email");
+    const Id = new mongoose.Types.ObjectId(labId);
+    console.log(Id);
+    const lab = await Lab.findById({_id : Id}).populate("createdBy", "name email");
 
     if (!lab) {
       return res.status(404).json({ message: "Lab not found" });
@@ -106,7 +108,7 @@ export const getLabsByFacultyId = async (req, res) => {
   try {
     const { facultyId } = req.query;
     const Id = new mongoose.Types.ObjectId(facultyId);
-    console.log("Received facultyId:", facultyId); // ✅ log it
+    // console.log("Received facultyId:", facultyId); // ✅ log it
 
     if (!facultyId) {
       return res.status(400).json({ message: "facultyId is required" });
@@ -128,14 +130,13 @@ export const getLabsByFacultyId = async (req, res) => {
 };
 
 
-
 // Update a Lab
 export const updateLab = async (req, res) => {
   try {
     const labId = req.params.id;
     const updateData = req.body;
     
-    console.log(updateData);
+    // console.log(updateData);
     const updatedLab = await Lab.findByIdAndUpdate(labId, updateData, {
       new: true,
       runValidators: true,
@@ -175,5 +176,29 @@ export const deleteLab = async (req, res) => {
   } catch (error) {
     console.error("Error in deleteLab:", error);
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+// to get list of all students
+export const getEnrolledStudentsByLab = async (req, res) => {
+  try {
+    const { labId } = req.params;
+
+
+    const lab = await Lab.findById(labId).populate("studentsEnrolled");
+
+    if (!lab) {
+      return res.status(404).json({ message: "Lab not found" });
+    }
+
+     return res.status(200).json({
+      labTitle: lab.title,
+      totalEnrolled: lab.studentsEnrolled.length,
+      students: lab.studentsEnrolled,
+    });
+  } catch (error) {
+    console.error("Error fetching enrolled students:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };

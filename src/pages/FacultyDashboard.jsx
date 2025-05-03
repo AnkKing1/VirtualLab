@@ -15,7 +15,7 @@ const FacultyDashboard = () => {
   useEffect(() => {
     const fetchFaculty = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("facultyToken");
 
         // Fetch faculty profile
         const facultyRes = await axios.get(`/api/v1/faculty/${facultyId}`, {
