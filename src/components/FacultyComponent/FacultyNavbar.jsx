@@ -45,7 +45,8 @@ const FacultyNavbar = () => {
           >
             Logout
           </button> */}
-          <Logout/>
+          <Logout userType="faculty" />
+
         </div>
       </div>
     </nav>

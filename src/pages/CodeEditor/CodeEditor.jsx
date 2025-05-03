@@ -30,9 +30,7 @@ const CodeEditor = () => {
   const [loading, setLoading] = useState(true);
   const [remainingTime, setRemainingTime] = useState(0);
 
-
- 
-
+  // Timer effect
   useEffect(() => {
     if (labDetails?.duration) {
       const start = Date.now();
@@ -46,10 +44,11 @@ const CodeEditor = () => {
     }
   }, [labDetails]);
 
+  // Fetch Student Data
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("studentToken");
         if (!token) {
           console.error("No auth token found");
           return;
@@ -74,6 +73,7 @@ const CodeEditor = () => {
     if (studentId) fetchStudent();
   }, [studentId]);
 
+  // Fetch Lab Details
   useEffect(() => {
     const fetchLabDetails = async () => {
       try {
@@ -89,8 +89,9 @@ const CodeEditor = () => {
     if (labId) fetchLabDetails();
   }, [labId]);
 
+  // Socket connection and code updates
   const socketRef = useRef(null);
-  // Setup socket connection once
+
   useEffect(() => {
     socketRef.current = io('http://localhost:5000'); // Connect once
 
@@ -98,31 +99,49 @@ const CodeEditor = () => {
       console.log("✅ Connected:", socketRef.current.id);
     });
 
+    // Join room after connection
+    const roomId = `room-${labId}-${studentId}`;
+    socketRef.current.emit('join-room', { roomId });
+    console.log(`Joined room: ${roomId}`);
+
+    // Listen for code changes
+    socketRef.current.on('code-update', (newCode) => {
+      setCode((prevCode) => {
+        if (prevCode !== newCode) {
+          return newCode;
+        }
+        return prevCode;
+      });
+    });
+
+    // Listen for code execution result
     socketRef.current.on('code-executed', (data) => {
       console.log(data);
       setOutput(data.output || 'No output');
       setLoading(false);
     });
 
+    // Listen for execution error
     socketRef.current.on('execution-error', (data) => {
       setOutput(data.error || 'Error executing code.');
       setLoading(false);
     });
 
+    // Handle connection error
     socketRef.current.on('connect_error', (err) => {
       console.error("❌ Connection error:", err.message);
     });
 
+    // Cleanup on unmount
     return () => {
-      socketRef.current.disconnect(); // Clean up on unmount
+      socketRef.current.disconnect();
     };
-  }, []);
-  
-    if (loading) return <div>Running your code...</div>;
+  }, [labId, studentId]); // Dependencies to ensure socket only reconnects if necessary
 
+  if (loading) return <div>Running your code...</div>;
+
+  // Run code
   const runCode = () => {
-    // setLoading(true);
-
     if (!code || !language || !labId || !studentId) {
       console.log("Missing data, cannot run code!");
       return;
@@ -132,7 +151,7 @@ const CodeEditor = () => {
       input,
       language,
       labId,
-      studentId, // Match backend
+      studentId,
     });
   };
 
@@ -231,7 +250,11 @@ const CodeEditor = () => {
             height="400px"
             extensions={[languageExtensions[language]]}
             theme={theme === 'dark' ? dracula : githubLight}
-            onChange={(val) => setCode(val)}
+            onChange={(val) => {
+              setCode(val);
+              const roomId = `room-${labId}-${studentId}`;
+              socketRef.current.emit("code-change", { roomId, code: val });
+            }}
           />
         </motion.div>
 
@@ -244,13 +267,13 @@ const CodeEditor = () => {
             transition={{ delay: 0.1 }}
             className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow"
           >
-            <h3 className="text-lg font-semibold mb-2">Input</h3>
+            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Input</h3>
             <textarea
-              className="w-full bg-gray-100 dark:bg-gray-900 dark:text-white p-3 rounded-xl resize-y"
-              rows="7"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Enter input for your program..."
+              rows={6}
+              placeholder="Enter input for your code..."
+              className="w-full text-gray-800 dark:text-white p-3 rounded-xl border dark:border-gray-700"
             />
           </motion.div>
 
@@ -261,10 +284,8 @@ const CodeEditor = () => {
             transition={{ delay: 0.2 }}
             className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow"
           >
-            <h3 className="text-lg font-semibold mb-2">Output</h3>
-            <pre className="bg-gray-100 dark:bg-gray-900 p-3 rounded-xl text-sm text-gray-800 dark:text-white whitespace-pre-wrap max-h-64 overflow-auto">
-              {output}
-            </pre>
+            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Output</h3>
+            <div className="whitespace-pre-wrap text-gray-800 dark:text-white">{output}</div>
           </motion.div>
         </div>
       </div>

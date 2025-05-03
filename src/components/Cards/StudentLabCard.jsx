@@ -18,7 +18,7 @@ const StudentLabCard = ({
 
   const handleEnroll = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("studentToken");
   
       if (!token || !studentId) {
         return alert("You must be logged in to enroll.");

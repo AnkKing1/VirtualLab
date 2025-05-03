@@ -45,6 +45,22 @@ app.use("/api/code", router);
 io.on("connection", (socket) => {
   console.log("🟢 A user connected:", socket.id);
 
+
+    // 1. Join a room: labId + studentId ensures unique room per enrolled student per lab
+    socket.on("join-room", ({ roomId }) => {
+      socket.join(roomId);
+      console.log(`✅ ${socket.id} joined room: ${roomId}`);
+    });
+  
+    // 2. When code changes, broadcast to others in the same room
+    socket.on("code-change", ({ roomId, code }) => {
+      socket.to(roomId).emit("code-update", code);
+    });
+  
+
+
+
+
   socket.on("execute-code", async (data) => {
     try {
       const { code, input, language, labId, studentId } = data;
