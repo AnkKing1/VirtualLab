@@ -32,7 +32,7 @@ const Home = () => {
             className="max-w-4xl"
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
-              Welcome to Virtual College Lab 
+              Welcome to CLabX
             </h1>
             <p className="text-xl md:text-2xl mb-10 text-gray-200">
               Experience next-generation learning with our state-of-the-art virtual lab laboratory platform

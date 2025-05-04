@@ -13,14 +13,15 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center p-4">
         
         {/* Logo */}
-
+        <div className="flex">
         <div className="text-2xl font-bold">
-          <Link to="/">Virtual Lab</Link>
+          <Link to="/"> <img src="/ClabX.jpg" alt="Lab Logo" className="h-10 ml-10 w-10 rounded-full" /></Link>
         </div>
 
-        <Link to="/" className="text-3xl font-bold text-purple-600 tracking-wide">
-          Virtual Lab
+        <Link to="/" className="text-3xl ml-3  font-bold text-purple-600 tracking-wide">
+          CLabX
         </Link>
+        </div>
 
         {/* Links */}
         <ul className="flex items-center space-x-8 text-gray-700 text-lg font-medium">

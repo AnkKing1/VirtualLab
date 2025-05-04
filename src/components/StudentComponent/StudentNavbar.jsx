@@ -15,8 +15,8 @@ const StudentNavbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Lab Logo */}
         <Link to="/student-dashboard" className="flex items-center space-x-2">
-          <img src="../../public/VCL.jpeg" alt="Lab Logo" className="h-10 w-10 rounded-full" />
-          <span className="text-xl font-semibold">Virtual Lab</span>
+          <img src="/ClabX.jpg" alt="Lab Logo" className="h-10 w-10 rounded-full" />
+          <span className="text-xl font-semibold">CLabX</span>
         </Link>
 
         {/* Student Dashboard Title */}

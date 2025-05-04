@@ -45,7 +45,7 @@ const EnrolledStudentList = () => {
   }
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50">
+    <div className="p-6 min-h-screen bg-gray-400">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-blue-700">
           Enrolled Students in <span className="text-gray-800">{labTitle}</span>
