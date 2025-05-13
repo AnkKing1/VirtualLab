@@ -60,8 +60,8 @@ const StudentSignup = () => {
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-10 px-4">
-      <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden max-w-5xl w-full">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-24 px-4">
+      <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden max-w-5xl w-full ">
         
         {/* Left Section */}
         <div className="md:w-1/2 bg-blue-600 flex flex-col items-center justify-center p-10 text-white">

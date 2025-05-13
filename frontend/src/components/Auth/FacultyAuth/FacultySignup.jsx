@@ -61,12 +61,12 @@ const FacultySignup = () => {
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-24">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-2xl rounded-xl overflow-hidden"
+        className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-2xl rounded-xl overflow-hidden "
       >
         {/* Left Section */}
         <div className="md:w-1/2 bg-gradient-to-br from-purple-600 to-purple-500 text-white flex flex-col justify-center items-center p-10">

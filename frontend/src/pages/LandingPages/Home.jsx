@@ -10,7 +10,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8 ">
       {/* Animated background patterns */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-1/2 -left-1/2 w-full h-full rotate-12 transform-gpu">
@@ -22,7 +22,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <div className="relative w-full h-screen bg-cover bg-center bg-fixed bg-blend-overlay bg-black/30" 
-           style={{ backgroundImage: 'url(../../public/NCE.avif)' }}>
+           style={{ backgroundImage: 'url(/NCE.avif)' }}>
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-transparent"></div>
         <div className="relative z-10 flex justify-center items-center h-full text-white text-center px-6">
           <motion.div
