@@ -66,6 +66,52 @@ export const approveFaculty = async (req, res) => {
     }
   };
 
+  // Delete Faculty
+  export const deleteFaculty = async (req, res) => {
+  try {
+    const facultyId = req.params.id;
+
+    const deletedFaculty = await Faculty.findByIdAndDelete(facultyId);
+
+    if (!deletedFaculty) {
+      return res.status(404).json({ message: 'Faculty not found' });
+    }
+
+    res.status(200).json({
+      message: 'Faculty deleted successfully',
+      faculty: deletedFaculty,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error deleting faculty',
+      error: error.message,
+    });
+  }
+};
+
+// delete students
+ export const deleteStudent = async (req, res) => {
+  try {
+    const studentId = req.params.id;
+
+    const deleteStudent = await Student.findByIdAndDelete(studentId);
+
+    if (!deleteStudent) {
+      return res.status(404).json({ message: 'Faculty not found' });
+    }
+
+    res.status(200).json({
+      message: 'Student deleted successfully',
+      faculty: deleteStudent,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error deleting student',
+      error: error.message,
+    });
+  }
+};
+
 // Register Admin 
 export const registerAdmin = async (req, res) => {
   const { name, email, password} = req.body;
@@ -188,5 +234,21 @@ export const forgotPassword = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server error. Try again later." });
+  }
+};
+
+export const getAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const admin = await Admin.findById(id).select("-password"); // Hide password
+
+    if (!admin) {
+      return res.status(404).json({ success: false, message: "Admin not found" });
+    }
+
+    res.status(200).json({ success: true, admin });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };

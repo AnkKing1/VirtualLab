@@ -1,85 +1,152 @@
-import React from "react";
-import { motion } from "framer-motion";
-import "tailwindcss/tailwind.css";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import { useParams } from 'react-router-dom';
 
-const AdminDashboard = () => {
+export default function AdminDashboard() {
+  const { adminId } = useParams();
+  const [view, setView] = useState('student');
+  const [students, setStudents] = useState([]);
+  const [faculties, setFaculties] = useState([]);
+  const [admin, setAdmin] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const studentRes = await axios.get('/api/v1/student/get-students');
+      const facultyRes = await axios.get('/api/v1/faculty/get-faculties');
+      const adminRes = await axios.get(`/api/v1/admin/${adminId}`);
+
+      setStudents(studentRes.data.students || []);
+      setFaculties(facultyRes.data.faculties || []);
+      setAdmin(adminRes.data.admin);
+    };
+    fetchData();
+  }, [adminId]);
+
+  const handleApprove = async (id, type) => {
+    const endpoint = type === 'student' ? `/api/v1/admin/approve-student/${id}` : `/api/v1/admin/approve-faculty/${id}`;
+    await axios.patch(endpoint);
+    setStudents(prev => prev.map(s => (s._id === id ? { ...s, isApproved: true } : s)));
+    setFaculties(prev => prev.map(f => (f._id === id ? { ...f, isApproved: true } : f)));
+  };
+
+  const handleReject = async (id, type) => {
+    const endpoint = type === 'student' ? `/api/v1/admin/delete-student/${id}` : `/api/v1/admin/delete-faculty/${id}`;
+    await axios.delete(endpoint);
+    setStudents(prev => prev.filter(s => !(s._id === id && type === 'student')));
+    setFaculties(prev => prev.filter(f => !(f._id === id && type === 'faculty')));
+  };
+
+  const approvedCount = students.filter(s => s.isApproved).length;
+  const pendingCount = students.filter(s => !s.isApproved).length;
+  const approvedFacultyCount = faculties.filter(f => f.isApproved).length;
+  const pendingFacultyCount = faculties.filter(f => !f.isApproved).length;
+  const currentData = view === 'student' ? students : faculties;
+
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      {/* Overview Panel */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Overview</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Metrics Cards */}
-          {[
-            { title: "Total Users", count: 1200 },
-            { title: "Active Labs", count: 35 },
-            { title: "Pending Approvals", count: 15 },
-            { title: "Notifications", count: 7 },
-          ].map((metric, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.05 }}
-              className="bg-white shadow-lg rounded-lg p-4 text-center"
-            >
-              <h3 className="text-lg font-semibold">{metric.title}</h3>
-              <p className="text-3xl font-bold text-indigo-600">{metric.count}</p>
-            </motion.div>
-          ))}
+    <div className="p-6 space-y-8">
+      {admin && (
+        <motion.div
+          className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-xl text-white shadow-lg"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-2xl font-bold">Welcome, {admin.name}</h2>
+          <p className="text-sm">Email: {admin.email}</p>
+        </motion.div>
+      )}
+
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-blue-500">
+          <h3 className="text-lg font-semibold">Total Students</h3>
+          <p className="text-2xl font-bold">{students.length}</p>
         </div>
-      </section>
+        <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-green-500">
+          <h3 className="text-lg font-semibold">Approved Students</h3>
+          <p className="text-2xl font-bold">{approvedCount}</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-yellow-500">
+          <h3 className="text-lg font-semibold">Pending Student Approvals</h3>
+          <p className="text-2xl font-bold">{pendingCount}</p>
+        </div>
+      </motion.div>
 
-      {/* User Management */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4">User Management</h2>
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-blue-500">
+          <h3 className="text-lg font-semibold">Total Faculties</h3>
+          <p className="text-2xl font-bold">{faculties.length}</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-green-500">
+          <h3 className="text-lg font-semibold">Approved Faculties</h3>
+          <p className="text-2xl font-bold">{approvedFacultyCount}</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-yellow-500">
+          <h3 className="text-lg font-semibold">Pending Faculty Approvals</h3>
+          <p className="text-2xl font-bold">{pendingFacultyCount}</p>
+        </div>
+      </motion.div>
 
-        {/* Tabs for Pending Requests and Registered Users */}
-        <div className="bg-white shadow-lg rounded-lg p-4">
-          <div className="flex space-x-4 border-b border-gray-200 mb-4">
-            <button className="text-indigo-600 font-semibold border-b-2 border-indigo-600 py-2">
-              Pending Requests
-            </button>
-            <button className="text-gray-600 hover:text-indigo-600 py-2">
-              Registered Users
-            </button>
-          </div>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <div className="space-x-2">
+          <button
+            onClick={() => setView('student')}
+            className={`px-4 py-2 rounded-md border ${view === 'student' ? 'bg-blue-600 text-white' : 'bg-white text-blue-600 border-blue-600'}`}
+          >
+            Students
+          </button>
+          <button
+            onClick={() => setView('faculty')}
+            className={`px-4 py-2 rounded-md border ${view === 'faculty' ? 'bg-blue-600 text-white' : 'bg-white text-blue-600 border-blue-600'}`}
+          >
+            Faculties
+          </button>
+        </div>
+      </div>
 
-          {/* Pending Requests Table */}
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Pending Approvals</h3>
-            <table className="min-w-full table-auto">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 border">Name</th>
-                  <th className="px-4 py-2 border">Role</th>
-                  <th className="px-4 py-2 border">Email</th>
-                  <th className="px-4 py-2 border">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[{ name: "John Doe", role: "Student", email: "john@example.com" }].map(
-                  (user, index) => (
-                    <tr key={index}>
-                      <td className="px-4 py-2 border">{user.name}</td>
-                      <td className="px-4 py-2 border">{user.role}</td>
-                      <td className="px-4 py-2 border">{user.email}</td>
-                      <td className="px-4 py-2 border">
-                        <button className="bg-green-500 text-white px-3 py-1 rounded mr-2 hover:bg-green-600">
-                          Approve
-                        </button>
-                        <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                          Reject
-                        </button>
-                      </td>
-                    </tr>
-                  )
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {Array.isArray(currentData) && currentData.map((user) => (
+          <motion.div
+            key={user._id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="rounded-2xl shadow-md p-4 bg-white space-y-2">
+              <h2 className="text-xl font-semibold">{user.name}</h2>
+              <p className="text-sm text-gray-600">Email: {user.email}</p>
+              <p className="text-sm text-gray-600">Approved: {user.isApproved ? 'Yes' : 'No'}</p>
+              <div className="flex gap-2 pt-2">
+                {!user.isApproved && (
+                  <button
+                    onClick={() => handleApprove(user._id, view)}
+                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                  >
+                    Approve
+                  </button>
                 )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+                <button
+                  onClick={() => handleReject(user._id, view)}
+                  className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Reject
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default AdminDashboard;
+}
