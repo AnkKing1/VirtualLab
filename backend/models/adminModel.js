@@ -17,12 +17,14 @@ const adminSchema = mongoose.Schema({
         type:String,
         required:[true,"Password is required"],
     },
-    confirmPassword:{
-        type:String,
-        required:[true,"Password is required"],
-    }
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
 
 },{timestamps:true})
 
 
-const Admin = mongoose.model('Admin', adminSchema)
+const Admin = mongoose.model('Admin', adminSchema);
+
+export default Admin;

@@ -20,11 +20,15 @@ import FacultyDashboard from "./pages/FacultyDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import EnrolledStudentList from "./components/FacultyComponent/EnrolledStudentList"
 import CodeEditor from "./pages/CodeEditor/CodeEditor"; // Added CodeEditor
+import AdminLogin from "./components/Auth/AdminAuth/AdminLogin";
+import AdminSignup from "./components/Auth/AdminAuth/AdminSignup";
 
 // Context Providers
 import { AuthProvider } from "./context/AuthContext";
 import StudentNavbar from "./components/StudentComponent/StudentNavbar";
 import FacultyNavbar from "./components/FacultyComponent/FacultyNavbar";
+import AdminNavbar from "./pages/AdminDashboard/AdminNavbar";
+import Admin from "./pages/AdminDashboard/Admin"
 
 // Layout for landing pages (with Navbar & Footer)
 const LandingLayout = () => (
@@ -53,6 +57,15 @@ const StudentLayout = () => (
   </div>
 );
 
+// Layout for admin-related routes
+const AdminLayout = () => (
+  <div>
+    <AdminNavbar/>
+    <Outlet/>
+    <Footer/>
+  </div>
+);
+
 const App = () => {
   return (
     <AuthProvider>
@@ -77,6 +90,15 @@ const App = () => {
                         <Route
                           path="student-signup"
                           element={<StudentSignup />}
+                        />
+
+                        <Route
+                          path="/admin-login"
+                          element={<AdminLogin />}
+                        />
+                        <Route
+                          path="/admin-signup"
+                          element={<AdminSignup />}
                         />
                         <Route
                           path="/forgot-password"
@@ -111,6 +133,14 @@ const App = () => {
                           path="/code-editor/:labId/:studentId"
                           element={<CodeEditor />}
                         />
+
+                        {/* Admin Dashboard & Related Pages */}
+                        <Route path="/admin" element={<AdminLayout/>}>
+
+                          <Route path="dashboard/:adminId" 
+                                element={<Admin/>}/>
+
+                        </Route>
 
                     </Routes>
     </AuthProvider>

@@ -43,20 +43,20 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              to="/student-login"
+              to="/admin-login"
               className="hover:text-purple-600 transition-colors duration-300"
             >
-              Student Login
+              Admin Login
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               to="/faculty-login"
               className="hover:text-purple-600 transition-colors duration-300"
             >
               Faculty Login
             </Link>
-          </li>
+          </li> */}
         </ul>
 
       </div>

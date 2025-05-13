@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 const Logout = ({ userType }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { logoutStudent, logoutFaculty, studentToken, facultyToken } = useAuth();
+  const { logoutStudent, logoutFaculty, studentToken, facultyToken ,adminToken, logoutAdmin} = useAuth();
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
@@ -17,6 +17,9 @@ const Logout = ({ userType }) => {
           logoutStudent();  // Log out student if student token is available
         } else if (userType === "faculty" && facultyToken) {
           logoutFaculty();  // Log out faculty if faculty token is available
+        }
+        else if(userType === "admin" && adminToken){
+          logoutAdmin();
         }
 
         setLoading(false);

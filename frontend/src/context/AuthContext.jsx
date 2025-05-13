@@ -15,7 +15,8 @@ export const AuthProvider = ({ children }) => {
 
     const [studentToken, setStudentToken] = useState(localStorage.getItem("studentToken"));
     const [facultyToken, setFacultyToken] = useState(localStorage.getItem("facultyToken"));
-
+    const [adminToken, setAdminToken] = useState(localStorage.getItem("adminToken"));
+    
     // Handling Logout functionality for Student and Faculty
     const logoutStudent = () => {
         setStudentToken(null);
@@ -27,14 +28,29 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("facultyToken");
     };
 
+    // Store Admin Token in localStorage
+    const storeAdminTokenInLS = (adminToken) => {
+        localStorage.setItem("adminToken", adminToken);
+    };
+
+
+    // Handling Logout functionality for Student and Faculty
+    const logoutAdmin = () => {
+        setAdminToken(null);
+        localStorage.removeItem("adminToken");
+    };
+
     return (
         <AuthContext.Provider value={{
             studentToken,
             facultyToken,
+            adminToken,
             storeStudentTokenInLS,
             storeFacultyTokenInLS,
             logoutStudent,
-            logoutFaculty
+            logoutFaculty,
+            storeAdminTokenInLS,
+            logoutAdmin
         }}>
             {children}
         </AuthContext.Provider>

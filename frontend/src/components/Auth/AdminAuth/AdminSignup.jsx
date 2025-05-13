@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthIndicator from "../PasswordStrengthIndicator";
+import { motion } from "framer-motion";
+import axios from "axios";
 
 const AdminSignup = () => {
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,7 +22,7 @@ const AdminSignup = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -39,82 +41,100 @@ const AdminSignup = () => {
       return;
     }
 
-
-    if (result.success) {
-      navigate("/admin-login");
-    } else {
-      setError(result.message);
+    try {
+      const response = await axios.post("api/v1/admin/signup", {
+        ...formData,
+      });
+      console.log(response);
+      if (response.data.admin.success) {
+        navigate("/admin-login");
+      } else {
+        setError(response.data.message || "Signup failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Server error. Try again later.");
     }
   };
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
-      <div className="md:w-1/2 bg-purple-600 text-white flex flex-col justify-center items-center p-8">
-        <h1 className="text-3xl font-bold mb-4">Admin Signup</h1>
-        <p className="text-lg">Create an account to manage Students and Faculties Access.</p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-24">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-2xl rounded-xl overflow-hidden "
+      >
+        {/* Left Section */}
+        <div className="md:w-1/2 bg-gradient-to-br from-purple-600 to-purple-500 text-white flex flex-col justify-center items-center p-10">
+          <h1 className="text-4xl font-extrabold mb-4">Admin Signup</h1>
+          <p className="text-lg text-center">Create an account to Approve Students and Faculties .</p>
+        </div>
 
+        {/* Right Section - Signup Form */}
+        <div className="md:w-1/2 p-10 flex flex-col justify-center">
+          {error && (
+            <p className="text-red-600 text-center mb-4">{error}</p>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-gray-700 mb-2">Full Name</label>
+              <input 
+                type="text" 
+                name="name" 
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Email</label>
+              <input 
+                type="email" 
+                name="email" 
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Password</label>
+              <input 
+                type="password" 
+                name="password" 
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
+                onChange={handleChange} 
+                required 
+              />
+              <PasswordStrengthIndicator password={formData.password} setStrength={setPasswordStrength} />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2">Confirm Password</label>
+              <input 
+                type="password" 
+                name="confirmPassword" 
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+            <button 
+              type="submit" 
+              className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition-all"
+            >
+              Sign Up
+            </button>
+          </form>
 
-      //Admin Secret code field should be there otherwise anyone can register in admin field 
-
-      <div className="md:w-1/2 bg-white flex flex-col justify-center items-center p-8">
-        {error && <p className="text-red-600">{error}</p>}
-        <form onSubmit={handleSubmit} className="w-full max-w-md">
-          <div className="mb-4">
-            <label className="block text-gray-700">Full Name</label>
-            <input 
-              type="text" 
-              name="name" 
-              className="w-full px-4 py-2 border rounded" 
-              onChange={handleChange} 
-              required 
-            />
+          <div className="mt-6 flex flex-col items-center text-purple-600 space-y-2">
+            <Link to="/admin-login" className="hover:underline">
+              Already have an account? Login
+            </Link>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
-            <input 
-              type="email" 
-              name="email" 
-              className="w-full px-4 py-2 border rounded" 
-              onChange={handleChange} 
-              required 
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
-            <input 
-              type="password" 
-              name="password" 
-              className="w-full px-4 py-2 border rounded" 
-              onChange={handleChange} 
-              required 
-            />
-            <PasswordStrengthIndicator password={formData.password} setStrength={setPasswordStrength} />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Confirm Password</label>
-            <input 
-              type="password" 
-              name="confirmPassword" 
-              className="w-full px-4 py-2 border rounded" 
-              onChange={handleChange} 
-              required 
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700"
-          >
-            Sign Up
-          </button>
-        </form>
-        <Link to="/admin-login" className="mt-4 text-purple-600">
-          Already have an account? Login
-        </Link>
-      </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

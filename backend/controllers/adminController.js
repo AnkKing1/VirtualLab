@@ -1,5 +1,15 @@
 import Student from '../models/studentModel.js';
 import Faculty from '../models/facultyModel.js';
+import Admin from '../models/adminModel.js'
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+
+const createToken = (id) => {
+  return jwt.sign({ id }, "ankit123", {
+    expiresIn: "1d",
+  });
+};
 
 // To Approve Students
  export const approveStudent = async (req, res) => {
@@ -56,13 +66,13 @@ export const approveFaculty = async (req, res) => {
     }
   };
 
-// Register Admin
+// Register Admin 
 export const registerAdmin = async (req, res) => {
-  const { name, email, password, confirmPassword} = req.body;
+  const { name, email, password} = req.body;
 
   try {
     // 1. Validate required fields
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password ) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
@@ -75,9 +85,9 @@ export const registerAdmin = async (req, res) => {
     }
 
     // 3. Check password match
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match." });
-    }
+    // if (password !== confirmPassword) {
+    //   return res.status(400).json({ message: "Passwords do not match." });
+    // }
 
     // 4. Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -87,7 +97,7 @@ export const registerAdmin = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      confirmPassword: hashedPassword, // optional: can remove this field from schema
+     
     });
 
     res.status(201).json({
@@ -113,18 +123,29 @@ export const loginAdmin = async (req, res) => {
     if (!admin)
       return res.status(401).json({ message: "Invalid email or password" });
 
+    if (!admin.isApproved) {
+      return res
+        .status(403)
+        .json({ message: "Your account is not approved yet " });
+    }
+
     // 2. Compare password
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch)
       return res.status(401).json({ message: "Invalid email or password" });
 
+    const token = createToken(admin._id);
+    console.log(token);
+
     // 3. Respond with admin info (you can add JWT token here)
     res.status(200).json({
       message: "Login successful",
       admin: {
+        success:true,
         id: admin._id,
         name: admin.name,
         email: admin.email,
+        token:token,
       },
     });
   } catch (error) {
