@@ -13,7 +13,7 @@ const CodeEditorSchema = new mongoose.Schema({
   language: {
     type: String,
     required: true,
-    enum: ['cpp', 'java', 'python', 'javascript', 'c', 'go', 'ruby', 'php'],
+    enum: ['cpp', 'java', 'python', 'javascript', 'c', 'go', 'ruby', 'bash'],
     default: 'javascript',
   },
   code: {

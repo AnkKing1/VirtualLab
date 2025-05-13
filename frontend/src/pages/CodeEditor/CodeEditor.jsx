@@ -12,11 +12,55 @@ import axios from 'axios';
 import io from 'socket.io-client';
 
 const languageExtensions = {
-  cpp: cpp(), 
+  cpp: cpp(),
+  c: cpp(), // same as cpp extension for now
+  python: python(),
   java: java(),
-  python: python(), 
   javascript: javascript(),
+  go: javascript(), // Codemirror doesn't have official support yet, fallback
+  ruby: javascript(), // Fallback
+  bash: javascript(), // Fallback
 };
+
+const boilerplates = {
+  cpp: `#include <iostream>
+using namespace std;
+
+int main() {
+    // Your code here
+    return 0;
+}`,
+  c: `#include <stdio.h>
+
+int main() {
+    // Your code here
+    return 0;
+}`,
+  python: `# Your Python code here
+def main():
+    print("Hello, Python!")
+
+if __name__ == "__main__":
+    main()`,
+  java: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java!");
+    }
+}`,
+  javascript: `// Your JavaScript code here
+console.log("Hello, JavaScript!");`,
+  go: `package main
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, Go!")
+}`,
+  ruby: `# Your Ruby code here
+puts "Hello, Ruby!"`,
+  bash: `#!/bin/bash
+echo "Hello, Bash!"`,
+};
+
 
 const CodeEditor = () => {
   const { labId, studentId } = useParams();
@@ -24,11 +68,19 @@ const CodeEditor = () => {
   const [language, setLanguage] = useState('cpp');
   const [student, setStudent] = useState(null);
   const [theme, setTheme] = useState('dark');
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(boilerplates[language]);
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(true);
   const [remainingTime, setRemainingTime] = useState(0);
+
+
+  
+// Update code when language changes
+useEffect(() => {
+  setCode(boilerplates[language]);
+}, [language]);
+
 
   // Timer effect
   useEffect(() => {

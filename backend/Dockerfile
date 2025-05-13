@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y \
     openjdk-11-jdk \
     curl \
     git \
+    ruby \
+    golang \
+    bash \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Docker CLI (optional)
