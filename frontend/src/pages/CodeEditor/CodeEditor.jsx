@@ -27,13 +27,13 @@ const boilerplates = {
 using namespace std;
 
 int main() {
-    // Your code here
+    cout<<"Hello C++ " << endl;
     return 0;
 }`,
   c: `#include <stdio.h>
 
 int main() {
-    // Your code here
+    printf("Hello C");
     return 0;
 }`,
   python: `# Your Python code here
@@ -83,18 +83,52 @@ useEffect(() => {
 
 
   // Timer effect
-  useEffect(() => {
-    if (labDetails?.duration) {
-      const start = Date.now();
-      const end = start + labDetails.duration * 60 * 1000;
-      const interval = setInterval(() => {
-        const now = Date.now();
-        const diff = Math.max(Math.floor((end - now) / 1000), 0);
+ useEffect(() => {
+  if (labDetails?.schedule && labDetails?.duration) {
+    const scheduledStart = new Date(labDetails.schedule).getTime();
+    const scheduledEnd = scheduledStart + labDetails.duration * 60 * 1000;
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+
+      if (now < scheduledStart) {
+        setRemainingTime(null); // Lab not started yet
+      } else if (now >= scheduledStart && now <= scheduledEnd) {
+        const diff = Math.floor((scheduledEnd - now) / 1000); // in seconds
         setRemainingTime(diff);
-      }, 1000);
-      return () => clearInterval(interval);
+      } else {
+        setRemainingTime(0); // Lab ended
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }
+}, [labDetails]);
+
+
+useEffect(() => {
+  const fetchSavedCode = async () => {
+    try {
+      const res = await axios.get(`/api/v1/code/latest`, {
+        params: { studentId, labId, language },
+      });
+
+      if (res.data?.success && res.data.code) {
+        setCode(res.data.code); // Load saved code into editor
+      } else {
+        setCode(boilerplates[language]); // fallback to boilerplate
+      }
+    } catch (err) {
+      console.error("Error loading saved code:", err.message);
+      setCode(boilerplates[language]); // fallback on error
     }
-  }, [labDetails]);
+  };
+
+  if (studentId && labId && language) {
+    fetchSavedCode();
+  }
+}, [studentId, labId, language]);
+
 
   // Fetch Student Data
   useEffect(() => {
@@ -226,11 +260,18 @@ useEffect(() => {
         )}
 
         {/* Timer below student info */}
-        {remainingTime >= 0 && (
-          <div className="absolute top-14 right-6 text-sm text-white bg-blue-600 px-3 py-1 mt-20 rounded-full shadow">
-            ⏳ {remainingTime > 0 ? `${Math.floor(remainingTime / 60)}m ${remainingTime % 60}s` : "Ended"}
-          </div>
-        )}
+        {remainingTime !== null && remainingTime > 0 && (
+  <div className="absolute top-14 right-6 text-sm text-white bg-blue-600 px-3 py-1 mt-20 rounded-full shadow">
+    ⏳ {Math.floor(remainingTime / 60)}m {remainingTime % 60}s
+  </div>
+)}
+
+{remainingTime === 0 && (
+  <div className="absolute top-14 right-6 text-sm text-white bg-red-600 px-3 py-1 mt-20 rounded-full shadow">
+    ⏳ Ended
+  </div>
+)}
+
 
         {/* Lab Title & Meta Info */}
         {labDetails ? (

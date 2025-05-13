@@ -39,3 +39,23 @@ export const executeCode = ({ code, input = '', language, labId, studentId }) =>
     });
   });
 };
+
+// GET /api/v1/code/latest?studentId=...&labId=...&language=...
+export const getLatestCode = async (req, res) => {
+  const { studentId, labId, language } = req.query;
+
+  try {
+    const latestCode = await CodeEditor.findOne({ studentId, labId, language })
+      .sort({ createdAt: -1 }); // Get the most recent one
+
+    if (!latestCode) {
+      return res.status(200).json({ success: true, code: null });
+    }
+
+    return res.status(200).json({ success: true, code: latestCode.code });
+  } catch (err) {
+    console.error('Error fetching latest code:', err.message);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+};
+

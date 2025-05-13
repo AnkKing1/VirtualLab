@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export default function AdminDashboard() {
   const { adminId } = useParams();
@@ -9,6 +9,9 @@ export default function AdminDashboard() {
   const [students, setStudents] = useState([]);
   const [faculties, setFaculties] = useState([]);
   const [admin, setAdmin] = useState(null);
+
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +25,15 @@ export default function AdminDashboard() {
     };
     fetchData();
   }, [adminId]);
+
+  
+  const handleCardClick = (userId) => {
+    if (view === "student") {
+      navigate(`/student/profile/${userId}`);
+    } else if (view === "faculty") {
+      navigate(`/faculty/profile/${userId}`);
+    }
+  };
 
   const handleApprove = async (id, type) => {
     const endpoint = type === 'student' ? `/api/v1/admin/approve-student/${id}` : `/api/v1/admin/approve-faculty/${id}`;
@@ -116,28 +128,40 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {Array.isArray(currentData) && currentData.map((user) => (
+      {Array.isArray(currentData) &&
+        currentData.map((user) => (
           <motion.div
             key={user._id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="rounded-2xl shadow-md p-4 bg-white space-y-2">
+            <div
+              onClick={() => handleCardClick(user._id)}
+              className="cursor-pointer rounded-2xl shadow-md p-4 bg-white space-y-2 hover:shadow-lg transition-shadow"
+            >
               <h2 className="text-xl font-semibold">{user.name}</h2>
               <p className="text-sm text-gray-600">Email: {user.email}</p>
-              <p className="text-sm text-gray-600">Approved: {user.isApproved ? 'Yes' : 'No'}</p>
+              <p className="text-sm text-gray-600">
+                Approved: {user.isApproved ? "Yes" : "No"}
+              </p>
               <div className="flex gap-2 pt-2">
                 {!user.isApproved && (
                   <button
-                    onClick={() => handleApprove(user._id, view)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleApprove(user._id, view);
+                    }}
                     className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"
                   >
                     Approve
                   </button>
                 )}
                 <button
-                  onClick={() => handleReject(user._id, view)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleReject(user._id, view);
+                  }}
                   className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
                 >
                   Reject
@@ -146,7 +170,7 @@ export default function AdminDashboard() {
             </div>
           </motion.div>
         ))}
-      </div>
+    </div>
     </div>
   );
 }

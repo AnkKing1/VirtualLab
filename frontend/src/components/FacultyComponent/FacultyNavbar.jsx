@@ -1,8 +1,9 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Logout from "../Auth/Logout";
 
 const FacultyNavbar = () => {
+  const { facultyId } = useParams();
   const navigate = useNavigate();
 
   // const handleLogout = () => {
@@ -29,14 +30,19 @@ const FacultyNavbar = () => {
         {/* Profile & Logout */}
         <div className="flex items-center space-x-6">
           {/* Profile */}
-          <Link to="/faculty-profile" className="flex items-center space-x-2">
-            <img
-              src="../../public/Faculty.jpeg"
-              alt="Profile"
-              className="h-10 w-10 rounded-full border-2 border-white"
-            />
-            <span className="hidden md:inline text-lg font-medium">Profile</span>
-          </Link>
+          <div
+      className="flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded-xl transition duration-300 ease-in-out"
+      onClick={() => navigate(`profile/${facultyId}`)}
+    >
+      <img
+        src="/Faculty.jpeg"
+        alt="Profile"
+        className="h-10 w-10 rounded-full border-2 border-blue-500 shadow-sm"
+      />
+      <span className="hidden md:inline text-lg font-semibold text-gray-800">
+        Profile
+      </span>
+    </div>
 
           {/* Logout Button */}
           {/* <button

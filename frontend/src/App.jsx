@@ -22,6 +22,8 @@ import EnrolledStudentList from "./components/FacultyComponent/EnrolledStudentLi
 import CodeEditor from "./pages/CodeEditor/CodeEditor"; // Added CodeEditor
 import AdminLogin from "./components/Auth/AdminAuth/AdminLogin";
 import AdminSignup from "./components/Auth/AdminAuth/AdminSignup";
+import StudentProfile from "./pages/Profiles/StudentProfile";
+import FacultyProfile from "./pages/Profiles/FacultyProfile";
 
 // Context Providers
 import { AuthProvider } from "./context/AuthContext";
@@ -116,6 +118,7 @@ const App = () => {
                         path ="EnrolledStudentList/:labId"
                         element={<EnrolledStudentList/>}
                         />
+                        <Route path="profile/:facultyId" element={<FacultyProfile />} />
                       </Route>
 
                       {/* Student Dashboard & Related Pages */}
@@ -125,6 +128,9 @@ const App = () => {
                           path="dashboard/:studentId"
                           element={<StudentDashboard />}
                         />
+
+                        <Route path="profile/:studentId" element={<StudentProfile />} />
+
 
                       </Route>
 

@@ -1,14 +1,17 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Logout from "../Auth/Logout";
 
 const StudentNavbar = () => {
+  const { studentId } = useParams();
   const navigate = useNavigate();
 
   // const handleLogout = () => {
   //   // Perform logout actions (clear session, etc.)
   //   navigate("/"); // Navigate to the home/landing page
   // };
+
+  console.log(studentId);
 
   return (
     <nav className="bg-blue-700 text-white py-4 px-6 shadow-lg">
@@ -33,14 +36,19 @@ const StudentNavbar = () => {
           </Link>
 
           {/* Profile */}
-          <Link to="/student-profile" className="flex items-center space-x-2">
-            <img
-              src="../../public/Student.jpeg"
-              alt="Profile"
-              className="h-10 w-10 rounded-full border-2 border-white"
-            />
-            <span className="hidden md:inline text-lg font-medium">Profile</span>
-          </Link>
+           <div
+      className="flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded-xl transition duration-300 ease-in-out"
+      onClick={() => navigate(`profile/${studentId}`)}
+    >
+      <img
+        src="/Student.jpeg"
+        alt="Profile"
+        className="h-10 w-10 rounded-full border-2 border-blue-500 shadow-sm"
+      />
+      <span className="hidden md:inline text-lg font-semibold text-gray-800">
+        Profile
+      </span>
+    </div>
 
           {/* Logout Button */}
           {/* <button

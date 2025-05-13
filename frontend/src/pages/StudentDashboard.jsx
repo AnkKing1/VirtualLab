@@ -71,17 +71,22 @@ const StudentDashboard = () => {
     fetchLabs();
   }, [student?.semester]);
 
-  // Filter labs
   const filterLabs = (type, labsList = labs) => {
-    const now = new Date();
-    const filtered = labsList.filter((lab) =>
-      type === "completed"
-        ? new Date(lab.schedule) < now
-        : new Date(lab.schedule) >= now
-    );
-    setFilteredLabs(filtered);
-    setActiveTab(type);
-  };
+  const now = new Date();
+
+  const filtered = labsList.filter((lab) => {
+    const scheduledStart = new Date(lab.schedule); // lab.schedule must be ISO or parsable string
+    const scheduledEnd = new Date(scheduledStart.getTime() + lab.duration * 60000);
+
+    return type === "completed"
+      ? now > scheduledEnd
+      : now <= scheduledEnd;
+  });
+
+  setFilteredLabs(filtered);
+  setActiveTab(type);
+};
+
 
   // console.log(labs);
 

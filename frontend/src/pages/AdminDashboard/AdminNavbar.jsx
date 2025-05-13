@@ -27,16 +27,18 @@ const AdminNavbar = () => {
         <h1 className="text-2xl font-bold">Admin Dashboard</h1>
 
         {/* Profile & Logout */}
+
         <div className="flex items-center space-x-6">
           {/* Profile */}
-          <Link to="/admin-profile" className="flex items-center space-x-2">
+          {/* <Link to="/admin-profile" className="flex items-center space-x-2">
             <img
               src="../../public/Faculty.jpeg"
               alt="Profile"
               className="h-10 w-10 rounded-full border-2 border-white"
             />
             <span className="hidden md:inline text-lg font-medium">Profile</span>
-          </Link>
+          </Link> */}
+          
 
           {/* Logout Button */}
           {/* <button

@@ -39,7 +39,7 @@ app.use("/api/v1/student", studentRouter);
 app.use("/api/v1/faculty", facultyRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/labs", labRouter);
-app.use("/api/code", router);
+app.use("/api/v1/code", router);
 
 // WebSocket connection
 io.on("connection", (socket) => {

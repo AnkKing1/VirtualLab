@@ -12,52 +12,61 @@ const FacultyDashboard = () => {
   const [filteredLabs, setFilteredLabs] = useState([]);
   const [activeTab, setActiveTab] = useState("upcoming");
 
-  useEffect(() => {
-    const fetchFaculty = async () => {
-      try {
-        const token = localStorage.getItem("facultyToken");
+useEffect(() => {
+  const fetchFaculty = async () => {
+    try {
+      const token = localStorage.getItem("facultyToken");
 
-        // Fetch faculty profile
-        const facultyRes = await axios.get(`/api/v1/faculty/${facultyId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      // Fetch faculty profile
+      const facultyRes = await axios.get(`/api/v1/faculty/${facultyId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (facultyRes.data?.success && facultyRes.data.faculty) {
-          setFaculty(facultyRes.data.faculty);
-        }
-
-        // Fetch labs created by faculty
-        const labsRes = await axios.get(`/api/v1/labs/get-labs-byFaculty`, {
-          params: { facultyId },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (labsRes.data?.success && labsRes.data.labs) {
-          setLabs(labsRes.data.labs);
-          filterLabs(activeTab, labsRes.data.labs);
-        }
-      } catch (err) {
-        console.error("Error loading faculty or labs:", err);
+      if (facultyRes.data?.success && facultyRes.data.faculty) {
+        setFaculty(facultyRes.data.faculty);
       }
-    };
 
-    if (facultyId) fetchFaculty();
-  }, [facultyId]);
+      // Fetch labs created by faculty
+      const labsRes = await axios.get(`/api/v1/labs/get-labs-byFaculty`, {
+        params: { facultyId },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (labsRes.data?.success && labsRes.data.labs) {
+        setLabs(labsRes.data.labs); // Don't call filterLabs here
+      }
+    } catch (err) {
+      console.error("Error loading faculty or labs:", err);
+    }
+  };
+
+  if (facultyId) fetchFaculty();
+}, [facultyId , labs]);
+
+// Trigger filtering when either activeTab or labs change
+useEffect(() => {
+  filterLabs(activeTab, labs);
+}, [activeTab, labs]);
 
   const filterLabs = (type, labsList = labs) => {
-    const now = new Date();
-    const filtered = labsList.filter((lab) =>
-      type === "completed"
-        ? new Date(lab.schedule) < now
-        : new Date(lab.schedule) >= now
-    );
-    setFilteredLabs(filtered);
-    setActiveTab(type);
-  };
+  const now = new Date();
+
+  const filtered = labsList.filter((lab) => {
+    const scheduledStart = new Date(lab.schedule); // lab.schedule must be ISO or parsable string
+    const scheduledEnd = new Date(scheduledStart.getTime() + lab.duration * 60000);
+
+    return type === "completed"
+      ? now > scheduledEnd
+      : now <= scheduledEnd;
+  });
+
+  setFilteredLabs(filtered);
+  setActiveTab(type);
+};
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">

@@ -17,47 +17,57 @@ const StudentLabCard = ({
   const navigate = useNavigate();
 
   const handleEnroll = async () => {
-    try {
-      const token = localStorage.getItem("studentToken");
-  
-      if (!token || !studentId) {
-        return alert("You must be logged in to enroll.");
-      }
-  
-      // Step 1: Check if the student is already enrolled
-      const checkRes = await axios.get(`/api/v1/labs/${id}`);
-      console.log(checkRes);
-      const enrolledStudents = checkRes.data.lab.studentsEnrolled;
-      console.log(enrolledStudents);
-  
-      if (enrolledStudents.includes(studentId)) {
-        // Already enrolled, navigate directly
-        alert("You are already enrolled.");
-        return navigate(`/code-editor/${id}/${studentId}`);
-      }
-  
-      // Step 2: Enroll the student if not already enrolled
-      const enrollRes = await axios.patch(
-        `/api/v1/student/enroll-student/${id}`,
-        { studentId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
-      if (enrollRes.data.success) {
-        alert("Successfully enrolled in lab!");
-        navigate(`/code-editor/${id}/${studentId}`);
-      } else {
-        alert("Enrollment failed. Try again.");
-      }
-    } catch (err) {
-      console.error("Enrollment error:", err);
-      alert("Something went wrong. Please try again.");
+  try {
+    const token = localStorage.getItem("studentToken");
+
+    if (!token || !studentId) {
+      return alert("You must be logged in to enroll.");
     }
-  };
+
+    // Combine date and time into a full Date object
+    const scheduledStart = new Date(`${date}T${time}`);
+    const scheduledEnd = new Date(scheduledStart.getTime() + duration * 60000); // duration in ms
+    const now = new Date();
+
+    // Check if current time is within lab time window
+    if (now < scheduledStart || now > scheduledEnd) {
+      return alert(
+        "You can only enroll when the lab is active. Please come back at the scheduled time."
+      );
+    }
+
+    // Step 1: Check if the student is already enrolled
+    const checkRes = await axios.get(`/api/v1/labs/${id}`);
+    const enrolledStudents = checkRes.data.lab.studentsEnrolled;
+
+    if (enrolledStudents.includes(studentId)) {
+      alert("You are already enrolled.");
+      return navigate(`/code-editor/${id}/${studentId}`);
+    }
+
+    // Step 2: Enroll the student
+    const enrollRes = await axios.patch(
+      `/api/v1/student/enroll-student/${id}`,
+      { studentId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (enrollRes.data.success) {
+      alert("Successfully enrolled in lab!");
+      navigate(`/code-editor/${id}/${studentId}`);
+    } else {
+      alert("Enrollment failed. Try again.");
+    }
+  } catch (err) {
+    console.error("Enrollment error:", err);
+    alert("Something went wrong. Please try again.");
+  }
+};
+
   
   
   return (
