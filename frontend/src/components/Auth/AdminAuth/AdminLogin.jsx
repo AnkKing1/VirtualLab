@@ -113,7 +113,7 @@ const AdminLogin = () => {
 
           <div className="flex flex-col items-center mt-6 space-y-2">
             <Link 
-              to="/forgot-password" 
+              to="/forgot-password?userType=admin" 
               className="text-sm text-purple-600 hover:underline"
             >
               Forgot Password?

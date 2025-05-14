@@ -104,7 +104,7 @@ const StudentLogin = () => {
           </form>
 
           <div className="mt-6 flex flex-col items-center text-blue-600 space-y-2">
-            <Link to="/forgot-password" className="hover:underline">
+            <Link to="/forgot-password?userType=student" className="hover:underline">
               Forgot Password?
             </Link>
             <Link to="/student-signup" className="hover:underline">

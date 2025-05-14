@@ -15,7 +15,7 @@ import StudentLogin from "./components/Auth/StudentAuth/StudentLogin";
 import FacultyLogin from "./components/Auth/FacultyAuth/FacultyLogin";
 import FacultySignup from "./components/Auth/FacultyAuth/FacultySignup";
 import StudentSignup from "./components/Auth/StudentAuth/StudentSignup";
-import ForgotPassword from "./components/Auth/ForgetPassword";
+import ForgotPassword from "./components/Auth/ForgotPassword";
 import FacultyDashboard from "./pages/FacultyDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import EnrolledStudentList from "./components/FacultyComponent/EnrolledStudentList"

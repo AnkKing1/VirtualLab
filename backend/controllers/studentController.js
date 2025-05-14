@@ -150,7 +150,7 @@ export const getSingleStudent = async (req, res) => {
 };
 
 export const forgotPassword = async (req, res) => {
-  const { email, newPassword, confirmNewPassword } = req.body;
+  const { email, newPassword} = req.body;
   try {
     // 1. Check if student exists
     const student = await Student.findOne({ email });
@@ -160,9 +160,9 @@ export const forgotPassword = async (req, res) => {
     }
 
     // 2. Check if passwords match
-    if (newPassword !== confirmNewPassword) {
-      return res.status(400).json({ success: false, message: "Passwords do not match." });
-    }
+    // if (newPassword !== confirmNewPassword) {
+    //   return res.status(400).json({ success: false, message: "Passwords do not match." });
+    // }
 
     // 3. Check password strength (basic length check, you can improve)
     if (newPassword.length < 8) {
