@@ -31,6 +31,7 @@ import StudentNavbar from "./components/StudentComponent/StudentNavbar";
 import FacultyNavbar from "./components/FacultyComponent/FacultyNavbar";
 import AdminNavbar from "./pages/AdminDashboard/AdminNavbar";
 import Admin from "./pages/AdminDashboard/Admin"
+import Developers from "./pages/LandingPages/Developers";
 
 // Layout for landing pages (with Navbar & Footer)
 const LandingLayout = () => (
@@ -105,6 +106,11 @@ const App = () => {
                         <Route
                           path="/forgot-password"
                           element={<ForgotPassword />}
+                        />
+
+                        <Route
+                          path="/developers"
+                          element={<Developers />}
                         />
                       </Route>
 

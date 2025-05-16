@@ -41,6 +41,14 @@ const Navbar = () => {
               Resources
             </Link>
           </li>
+           <li>
+            <Link
+              to="/developers"
+              className="hover:text-purple-600 transition-colors duration-300"
+            >
+              Developers
+            </Link>
+          </li>
           <li>
             <Link
               to="/admin-login"
