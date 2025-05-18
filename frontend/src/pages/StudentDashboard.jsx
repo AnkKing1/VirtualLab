@@ -11,7 +11,7 @@ const StudentDashboard = () => {
   const [error, setError] = useState("");
   const [filteredLabs, setFilteredLabs] = useState([]);
   const [activeTab, setActiveTab] = useState("upcoming");
-
+ 
   // Fetch student data
   useEffect(() => {
     const fetchStudent = async () => {
@@ -61,7 +61,6 @@ const StudentDashboard = () => {
 
         if (labsRes.data?.success && labsRes.data.lab) {
           setLabs(labsRes.data.lab);
-          filterLabs("upcoming", labsRes.data.lab);
         }
       } catch (err) {
         console.error("Error fetching labs:", err);
@@ -70,6 +69,11 @@ const StudentDashboard = () => {
 
     fetchLabs();
   }, [student?.semester]);
+
+  // Trigger filtering when either activeTab or labs change
+  useEffect(() => {
+    filterLabs(activeTab, labs);
+  }, [activeTab, labs]);
 
   const filterLabs = (type, labsList = labs) => {
   const now = new Date();
