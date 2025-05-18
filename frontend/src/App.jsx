@@ -150,7 +150,13 @@ const App = () => {
                         <Route path="/admin" element={<AdminLayout/>}>
 
                           <Route path="dashboard/:adminId" 
-                                element={<Admin/>}/>
+                                element={<Admin/>}
+                                
+                                />
+
+                          <Route path=":adminId/student/profile/:studentId" element={<StudentProfile />} />
+
+                          <Route path=":adminId/faculty/profile/:facultyId" element={<FacultyProfile />} />
 
                         </Route>
 

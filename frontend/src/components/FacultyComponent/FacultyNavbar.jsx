@@ -19,7 +19,7 @@ const FacultyNavbar = () => {
     <nav className="bg-blue-700 text-white py-4 px-6 shadow-lg">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Lab Logo */}
-        <Link to="/faculty-dashboard" className="flex items-center space-x-2">
+        <Link to={`/faculty/dashboard/${facultyId}`}className="flex items-center space-x-2">
           <img src="/ClabX.jpg" alt="Lab Logo" className="h-10 w-10 rounded-full" />
           <span className="text-xl font-semibold">CLabX</span>
         </Link>

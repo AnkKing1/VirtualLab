@@ -29,9 +29,9 @@ export default function AdminDashboard() {
   
   const handleCardClick = (userId) => {
     if (view === "student") {
-      navigate(`/student/profile/${userId}`);
+      navigate(`/admin/${adminId}/student/profile/${userId}`);
     } else if (view === "faculty") {
-      navigate(`/faculty/profile/${userId}`);
+      navigate(`/admin/${adminId}/faculty/profile/${userId}`);
     }
   };
 

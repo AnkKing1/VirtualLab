@@ -1,8 +1,9 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Logout from "../../components/Auth/Logout";
 
 const AdminNavbar = () => {
+  const {adminId} = useParams();
   const navigate = useNavigate();
 
   // const handleLogout = () => {
@@ -18,7 +19,7 @@ const AdminNavbar = () => {
     <nav className="bg-blue-700 text-white py-4 px-6 shadow-lg">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Lab Logo */}
-        <Link to="/admin-dashboard" className="flex items-center space-x-2">
+        <Link to={`/admin/dashboard/${adminId}`} className="flex items-center space-x-2">
           <img src="/ClabX.jpg" alt="Lab Logo" className="h-10 w-10 rounded-full" />
           <span className="text-xl font-semibold">CLabX</span>
         </Link>

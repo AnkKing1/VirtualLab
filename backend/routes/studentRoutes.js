@@ -17,6 +17,8 @@ studentRouter.get('/get-students', getAllStudents);
 studentRouter.get('/:id',authenticateStudent, getSingleStudent
 );
 
+studentRouter.get('/profile/:id', getSingleStudent);
+
 //forgot password
 studentRouter.patch('/forgot-password',forgotPassword);
 

@@ -19,6 +19,8 @@ facultyRouter.get("/get-faculties", getAllFaculties);
 //get a single faculty data
 facultyRouter.get("/:id" , authenticateFaculty, getSingleFaculty);
 
+facultyRouter.get("/profile/:id",getSingleFaculty);
+
 facultyRouter.patch("/forgot-password",forgotPassword);
 
 export default facultyRouter;

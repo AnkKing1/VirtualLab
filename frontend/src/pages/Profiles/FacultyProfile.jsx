@@ -11,12 +11,7 @@ const FacultyProfile = () => {
   useEffect(() => {
     const fetchFaculty = async () => {
       try {
-        const token = localStorage.getItem("facultyToken");
-        const res = await axios.get(`/api/v1/faculty/${facultyId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(`/api/v1/faculty/profile/${facultyId}`);
 
         if (res.data?.success && res.data.faculty) {
           setFaculty(res.data.faculty);

@@ -65,7 +65,7 @@ export default function Developers() {
             <img
               src={dev.image}
               alt={dev.name}
-              className="w-28 h-28 object-cover rounded-full border-4 border-indigo-500 shadow-md"
+              className="w-36 h-36 object-cover rounded-full border-4 border-indigo-500 shadow-md"
             />
             <div>
               <h3 className="text-lg font-semibold text-gray-800">{dev.name}</h3>

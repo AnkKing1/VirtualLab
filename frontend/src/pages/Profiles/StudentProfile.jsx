@@ -7,16 +7,11 @@ const StudentProfile = () => {
   const { studentId } = useParams();
   const [student, setStudent] = useState(null);
   const [error, setError] = useState("");
-
+  
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        const token = localStorage.getItem("studentToken");
-        const res = await axios.get(`/api/v1/student/${studentId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(`/api/v1/student/profile/${studentId}`);
 
         if (res.data?.success && res.data.student) {
           setStudent(res.data.student);
