@@ -24,6 +24,7 @@ import AdminLogin from "./components/Auth/AdminAuth/AdminLogin";
 import AdminSignup from "./components/Auth/AdminAuth/AdminSignup";
 import StudentProfile from "./pages/Profiles/StudentProfile";
 import FacultyProfile from "./pages/Profiles/FacultyProfile";
+import CheckCodeEditor from "./components/FacultyComponent/CheckCodeEditor"
 
 // Context Providers
 import { AuthProvider } from "./context/AuthContext";
@@ -119,6 +120,10 @@ const App = () => {
                         <Route
                           path="dashboard/:facultyId"
                           element={<FacultyDashboard />}
+                        />
+                         <Route
+                          path="code-editor/:labId/:studentId"
+                          element={<CheckCodeEditor />}
                         />
                         <Route
                         path ="EnrolledStudentList/:labId"

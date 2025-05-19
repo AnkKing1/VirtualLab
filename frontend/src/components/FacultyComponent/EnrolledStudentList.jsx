@@ -33,7 +33,7 @@ const EnrolledStudentList = () => {
 
   const handleCardClick = (studentId) => {
     // Navigate to student profile or performance page (customize this route)
-    navigate(`/code-editor/${labId}/${studentId}`);
+    navigate(`/faculty/code-editor/${labId}/${studentId}`);
   };
 
   if (loading) {

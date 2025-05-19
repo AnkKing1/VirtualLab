@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams} from 'react-router-dom';
 import { motion } from 'framer-motion';
 import CodeMirror from '@uiw/react-codemirror';
 import { cpp } from '@codemirror/lang-cpp';
@@ -73,7 +73,9 @@ const CodeEditor = () => {
   const [output, setOutput] = useState('');
   const [loading, setLoading] = useState(true);
   const [remainingTime, setRemainingTime] = useState(0);
-   const navigate = useNavigate();
+
+ 
+
 
   
 // Update code when language changes
@@ -83,14 +85,14 @@ useEffect(() => {
 
 
   // Timer effect
-useEffect(() => {
+   useEffect(() => {
     if (labDetails?.schedule && labDetails?.duration) {
       const scheduledStart = new Date(labDetails.schedule).getTime();
       const scheduledEnd = scheduledStart + labDetails.duration * 60 * 1000;
-
+  
       const interval = setInterval(() => {
         const now = Date.now();
-
+  
         if (now < scheduledStart) {
           setRemainingTime(null); // Lab not started yet
         } else if (now >= scheduledStart && now <= scheduledEnd) {
@@ -98,14 +100,13 @@ useEffect(() => {
           setRemainingTime(diff);
         } else {
           setRemainingTime(0); // Lab ended
-          clearInterval(interval); // Stop the timer
-          navigate(`/student/dashboard/${studentId}`); // Navigate after lab ends
         }
       }, 1000);
-
+  
       return () => clearInterval(interval);
     }
-  }, [labDetails, navigate]);
+  }, [labDetails]);
+
 
 
 useEffect(() => {
@@ -329,17 +330,7 @@ useEffect(() => {
         >
           Run Code
         </motion.button>
-
-        <motion.button
-          onClick={() => navigate(`/student/dashboard/${studentId}`)}
-          whileTap={{ scale: 0.95 }}
-          className="bg-red-600 hover:bg-green-600 text-white px-6 py-2 rounded-xl shadow"
-        >
-          Save and Exit
-        </motion.button>
       </motion.div>
-
-
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
