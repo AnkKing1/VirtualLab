@@ -40,7 +40,7 @@ const StudentDashboard = () => {
   }, [studentId]);
 
   // console.log(student);
-  
+   
 
   // Fetch labs based on semester
   useEffect(() => {
@@ -68,7 +68,7 @@ const StudentDashboard = () => {
     };
 
     fetchLabs();
-  }, [student?.semester]);
+  }, [student?.semester, labs]);
 
   // Trigger filtering when either activeTab or labs change
   useEffect(() => {
