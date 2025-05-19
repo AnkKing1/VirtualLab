@@ -68,7 +68,7 @@ const StudentDashboard = () => {
     };
 
     fetchLabs();
-  }, [student?.semester, labs]);
+  }, [student?.semester]);
 
   // Trigger filtering when either activeTab or labs change
   useEffect(() => {

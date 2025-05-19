@@ -34,7 +34,7 @@ const StudentLabCard = ({
       return alert(
         "You can only enroll when the lab is active. Please come back at the scheduled time."
       );
-    }
+    } 
 
     // Step 1: Check if the student is already enrolled
     const checkRes = await axios.get(`/api/v1/labs/${id}`);

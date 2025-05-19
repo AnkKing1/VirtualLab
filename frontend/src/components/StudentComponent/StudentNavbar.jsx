@@ -28,12 +28,14 @@ const StudentNavbar = () => {
         {/* Navigation Links */}
         <div className="flex items-center space-x-6">
           {/* Practice Section */}
-          <Link
-            to="/practice"
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md font-medium transition"
-          >
-            Practice
-          </Link>
+        
+        <Link
+          to={`/code-editor/${123}/${studentId}`}
+          className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-md font-medium transition"
+        >
+          Practice
+        </Link>
+
 
           {/* Profile */}
            <div
