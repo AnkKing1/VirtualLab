@@ -7,7 +7,7 @@ const developers = [
     name: "ASHAR PERWEZ",
     regNumber: "21105109009",
     email: "asharperwez@gmail.com",
-    description: "MERN Stack | Tailwind | MongoDB | REST APIs",
+    description: "UI Wireframing & Prototyping  | Frontend Development | Project Documentation & Coordination",
     image: "/Ashar.jpg",
   },
   {

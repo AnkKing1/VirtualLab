@@ -123,11 +123,11 @@ export const registerAdmin = async (req, res) => {
     }
 
     // 2. Check if user already exists
-    const existingAdmin = await Faculty.findOne({ email });
+    const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
       return res
         .status(409)
-        .json({ message: "Faculty already exists with this email." });
+        .json({ message: "Admin already exists with this email." });
     }
 
     // 3. Check password match
@@ -181,7 +181,6 @@ export const loginAdmin = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
 
     const token = createToken(admin._id);
-    console.log(token);
 
     // 3. Respond with admin info (you can add JWT token here)
     res.status(200).json({
