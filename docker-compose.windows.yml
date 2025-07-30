@@ -1,0 +1,41 @@
+services:
+  # Backend service optimized for Windows Server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.windows
+    container_name: virtuallab-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb+srv://Ankit:Mongodb@1@cluster0.7ara8xn.mongodb.net/labDb
+      - PORT=5000
+      - JWT_SECRET=ankit123
+      - JWT_EXPIRE=1d
+      - NODE_ENV=production
+    # Remove Docker socket mount for Windows Server
+    restart: unless-stopped
+    networks:
+      - virtuallab-network
+
+  # Frontend service optimized for Windows Server
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: virtuallab-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - virtuallab-network
+
+networks:
+  virtuallab-network:
+    driver: bridge
+
+volumes:
+  node_modules_backend:
+  node_modules_frontend:

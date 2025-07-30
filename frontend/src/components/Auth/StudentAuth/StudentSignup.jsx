@@ -13,7 +13,7 @@ const StudentSignup = () => {
     confirmPassword: "",
     registrationNumber: "",
     department: "",
-    semester: ""
+    semester: "",
   });
 
   const [error, setError] = useState("");
@@ -44,7 +44,9 @@ const StudentSignup = () => {
     }
 
     try {
-      const response = await axios.post("api/v1/student/signup", { ...formData });
+      const response = await axios.post("/api/v1/student/signup", {
+        ...formData,
+      });
       console.log(response);
       if (response.data.student.success) {
         navigate("/student-login");
@@ -62,11 +64,12 @@ const StudentSignup = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-24 px-4">
       <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden max-w-5xl w-full ">
-        
         {/* Left Section */}
         <div className="md:w-1/2 bg-blue-600 flex flex-col items-center justify-center p-10 text-white">
           <h1 className="text-4xl font-bold mb-4">Student Signup</h1>
-          <p className="text-lg text-center">Create an account to access virtual labs and resources.</p>
+          <p className="text-lg text-center">
+            Create an account to access virtual labs and resources.
+          </p>
         </div>
 
         {/* Right Section - Form */}
@@ -77,7 +80,6 @@ const StudentSignup = () => {
             </div>
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
-            
             {/* Full Name */}
             <div>
               <label className="block text-gray-700 mb-1">Full Name</label>
@@ -104,7 +106,9 @@ const StudentSignup = () => {
 
             {/* Registration Number */}
             <div>
-              <label className="block text-gray-700 mb-1">Registration Number</label>
+              <label className="block text-gray-700 mb-1">
+                Registration Number
+              </label>
               <input
                 type="text"
                 name="registrationNumber"
@@ -158,12 +162,17 @@ const StudentSignup = () => {
                 onChange={handleChange}
                 required
               />
-              <PasswordStrengthIndicator password={formData.password} setStrength={setPasswordStrength} />
+              <PasswordStrengthIndicator
+                password={formData.password}
+                setStrength={setPasswordStrength}
+              />
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-gray-700 mb-1">Confirm Password</label>
+              <label className="block text-gray-700 mb-1">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -189,7 +198,6 @@ const StudentSignup = () => {
             </Link>
           </div>
         </div>
-
       </div>
     </div>
   );

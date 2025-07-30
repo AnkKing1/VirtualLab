@@ -11,7 +11,7 @@ const StudentLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const {storeStudentTokenInLS} = useAuth();
+  const { storeStudentTokenInLS } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,9 +24,11 @@ const StudentLogin = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("api/v1/student/login",{... formData});
+      const response = await axios.post("/api/v1/student/login", {
+        ...formData,
+      });
       console.log(response);
-      
+
       setLoading(false);
 
       setTimeout(() => {
@@ -37,7 +39,7 @@ const StudentLogin = () => {
 
           navigate(`/student/dashboard/${studentId}`);
         } else {
-          setError(response.data.message||"Invalid email or password.");
+          setError(response.data.message || "Invalid email or password.");
           setLoading(false);
         }
       }, 1000);
@@ -45,14 +47,12 @@ const StudentLogin = () => {
       console.error(err);
       setLoading(false);
       setError(err.response?.data?.message || "Server error. Try again later.");
-      
     }
-    
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-8">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
@@ -61,14 +61,14 @@ const StudentLogin = () => {
         {/* Left Section */}
         <div className="md:w-1/2 bg-gradient-to-br from-blue-600 to-blue-500 text-white flex flex-col justify-center items-center p-10">
           <h1 className="text-4xl font-extrabold mb-4">Student Login</h1>
-          <p className="text-lg text-center">Sign in to access your resources and courses.</p>
+          <p className="text-lg text-center">
+            Sign in to access your resources and courses.
+          </p>
         </div>
 
         {/* Right Section - Login Form */}
         <div className="md:w-1/2 p-10 flex flex-col justify-center">
-          {error && (
-            <p className="text-red-600 text-center mb-4">{error}</p>
-          )}
+          {error && <p className="text-red-600 text-center mb-4">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-gray-700 mb-2">Email</label>
@@ -96,7 +96,9 @@ const StudentLogin = () => {
             <button
               type="submit"
               className={`w-full bg-blue-600 text-white py-2 rounded-lg font-semibold ${
-                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700 transition-all"
+                loading
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-blue-700 transition-all"
               }`}
             >
               {loading ? "Logging in..." : "Login"}
@@ -104,7 +106,10 @@ const StudentLogin = () => {
           </form>
 
           <div className="mt-6 flex flex-col items-center text-blue-600 space-y-2">
-            <Link to="/forgot-password?userType=student" className="hover:underline">
+            <Link
+              to="/forgot-password?userType=student"
+              className="hover:underline"
+            >
               Forgot Password?
             </Link>
             <Link to="/student-signup" className="hover:underline">

@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import CodeMirror from '@uiw/react-codemirror';
-import { cpp } from '@codemirror/lang-cpp';
-import { java } from '@codemirror/lang-java';
-import { python } from '@codemirror/lang-python';
-import { javascript } from '@codemirror/lang-javascript';
-import { dracula } from '@uiw/codemirror-theme-dracula';
-import { githubLight } from '@uiw/codemirror-theme-github';
-import axios from 'axios';
-import io from 'socket.io-client';
+import React, { useEffect, useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import CodeMirror from "@uiw/react-codemirror";
+import { cpp } from "@codemirror/lang-cpp";
+import { java } from "@codemirror/lang-java";
+import { python } from "@codemirror/lang-python";
+import { javascript } from "@codemirror/lang-javascript";
+import { dracula } from "@uiw/codemirror-theme-dracula";
+import { githubLight } from "@uiw/codemirror-theme-github";
+import axios from "axios";
+import io from "socket.io-client";
 
 const languageExtensions = {
   cpp: cpp(),
@@ -61,29 +61,26 @@ puts "Hello, Ruby!"`,
 echo "Hello, Bash!"`,
 };
 
-
 const CodeEditor = () => {
   const { labId, studentId } = useParams();
   const [labDetails, setLabDetails] = useState(null);
-  const [language, setLanguage] = useState('cpp');
+  const [language, setLanguage] = useState("cpp");
   const [student, setStudent] = useState(null);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState("dark");
   const [code, setCode] = useState(boilerplates[language]);
-  const [input, setInput] = useState('');
-  const [output, setOutput] = useState('');
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(true);
   const [remainingTime, setRemainingTime] = useState(0);
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  
-// Update code when language changes
-useEffect(() => {
-  setCode(boilerplates[language]);
-}, [language]);
-
+  // Update code when language changes
+  useEffect(() => {
+    setCode(boilerplates[language]);
+  }, [language]);
 
   // Timer effect
-useEffect(() => {
+  useEffect(() => {
     if (labDetails?.schedule && labDetails?.duration) {
       const scheduledStart = new Date(labDetails.schedule).getTime();
       const scheduledEnd = scheduledStart + labDetails.duration * 60 * 1000;
@@ -107,30 +104,28 @@ useEffect(() => {
     }
   }, [labDetails, navigate]);
 
+  useEffect(() => {
+    const fetchSavedCode = async () => {
+      try {
+        const res = await axios.get(`/api/v1/code/latest`, {
+          params: { studentId, labId, language },
+        });
 
-useEffect(() => {
-  const fetchSavedCode = async () => {
-    try {
-      const res = await axios.get(`/api/v1/code/latest`, {
-        params: { studentId, labId, language },
-      });
-
-      if (res.data?.success && res.data.code) {
-        setCode(res.data.code); // Load saved code into editor
-      } else {
-        setCode(boilerplates[language]); // fallback to boilerplate
+        if (res.data?.success && res.data.code) {
+          setCode(res.data.code); // Load saved code into editor
+        } else {
+          setCode(boilerplates[language]); // fallback to boilerplate
+        }
+      } catch (err) {
+        console.error("Error loading saved code:", err.message);
+        setCode(boilerplates[language]); // fallback on error
       }
-    } catch (err) {
-      console.error("Error loading saved code:", err.message);
-      setCode(boilerplates[language]); // fallback on error
+    };
+
+    if (studentId && labId && language) {
+      fetchSavedCode();
     }
-  };
-
-  if (studentId && labId && language) {
-    fetchSavedCode();
-  }
-}, [studentId, labId, language]);
-
+  }, [studentId, labId, language]);
 
   // Fetch Student Data
   useEffect(() => {
@@ -141,13 +136,13 @@ useEffect(() => {
           console.error("No auth token found");
           return;
         }
-  
+
         const res = await axios.get(`/api/v1/student/${studentId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         if (res.data?.success && res.data.student) {
           setStudent(res.data.student);
         } else {
@@ -157,7 +152,7 @@ useEffect(() => {
         console.error("Error loading student:", err);
       }
     };
-  
+
     if (studentId) fetchStudent();
   }, [studentId]);
 
@@ -181,19 +176,19 @@ useEffect(() => {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io('http://localhost:5000'); // Connect once
+    socketRef.current = io(); // Use relative URL - nginx will proxy to backend
 
-    socketRef.current.on('connect', () => {
+    socketRef.current.on("connect", () => {
       console.log("✅ Connected:", socketRef.current.id);
     });
 
     // Join room after connection
     const roomId = `room-${labId}-${studentId}`;
-    socketRef.current.emit('join-room', { roomId });
+    socketRef.current.emit("join-room", { roomId });
     console.log(`Joined room: ${roomId}`);
 
     // Listen for code changes
-    socketRef.current.on('code-update', (newCode) => {
+    socketRef.current.on("code-update", (newCode) => {
       setCode((prevCode) => {
         if (prevCode !== newCode) {
           return newCode;
@@ -203,20 +198,20 @@ useEffect(() => {
     });
 
     // Listen for code execution result
-    socketRef.current.on('code-executed', (data) => {
+    socketRef.current.on("code-executed", (data) => {
       console.log(data);
-      setOutput(data.output || 'No output');
+      setOutput(data.output || "No output");
       setLoading(false);
     });
 
     // Listen for execution error
-    socketRef.current.on('execution-error', (data) => {
-      setOutput(data.error || 'Error executing code.');
+    socketRef.current.on("execution-error", (data) => {
+      setOutput(data.error || "Error executing code.");
       setLoading(false);
     });
 
     // Handle connection error
-    socketRef.current.on('connect_error', (err) => {
+    socketRef.current.on("connect_error", (err) => {
       console.error("❌ Connection error:", err.message);
     });
 
@@ -234,7 +229,7 @@ useEffect(() => {
       console.log("Missing data, cannot run code!");
       return;
     }
-    socketRef.current.emit('execute-code', {
+    socketRef.current.emit("execute-code", {
       code,
       input,
       language,
@@ -263,36 +258,50 @@ useEffect(() => {
 
         {/* Timer below student info */}
         {remainingTime !== null && remainingTime > 0 && (
-  <div className="absolute top-14 right-6 text-sm text-white bg-blue-600 px-3 py-1 mt-20 rounded-full shadow">
-    ⏳ {Math.floor(remainingTime / 60)}m {remainingTime % 60}s
-  </div>
-)}
+          <div className="absolute top-14 right-6 text-sm text-white bg-blue-600 px-3 py-1 mt-20 rounded-full shadow">
+            ⏳ {Math.floor(remainingTime / 60)}m {remainingTime % 60}s
+          </div>
+        )}
 
-{remainingTime === 0 && (
-  <div className="absolute top-14 right-6 text-sm text-white bg-red-600 px-3 py-1 mt-20 rounded-full shadow">
-    ⏳ Ended
-  </div>
-)}
-
+        {remainingTime === 0 && (
+          <div className="absolute top-14 right-6 text-sm text-white bg-red-600 px-3 py-1 mt-20 rounded-full shadow">
+            ⏳ Ended
+          </div>
+        )}
 
         {/* Lab Title & Meta Info */}
         {labDetails ? (
           <div>
-            <h2 className="text-3xl font-bold mb-4 text-blue-700">{labDetails.title}</h2>
+            <h2 className="text-3xl font-bold mb-4 text-blue-700">
+              {labDetails.title}
+            </h2>
             <div className="space-y-1 text-gray-700 dark:text-gray-300">
-              <p><strong>Faculty:</strong> {labDetails.createdBy?.name || "N/A"}</p>
-              <p><strong>Semester:</strong> {labDetails.semester}</p>
-              <p><strong>Scheduled:</strong> {new Date(labDetails.schedule).toLocaleString()}</p>
+              <p>
+                <strong>Faculty:</strong> {labDetails.createdBy?.name || "N/A"}
+              </p>
+              <p>
+                <strong>Semester:</strong> {labDetails.semester}
+              </p>
+              <p>
+                <strong>Scheduled:</strong>{" "}
+                {new Date(labDetails.schedule).toLocaleString()}
+              </p>
             </div>
 
             {/* Description Block */}
             <div className="mt-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner">
-              <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100">Description</h3>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{labDetails.description}</p>
+              <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-100">
+                Description
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {labDetails.description}
+              </p>
             </div>
           </div>
         ) : (
-          <p className="text-gray-500 dark:text-gray-400 animate-pulse">Loading lab details...</p>
+          <p className="text-gray-500 dark:text-gray-400 animate-pulse">
+            Loading lab details...
+          </p>
         )}
       </motion.div>
 
@@ -309,7 +318,9 @@ useEffect(() => {
           className="border dark:border-gray-700 rounded-xl px-4 py-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white shadow"
         >
           {Object.keys(languageExtensions).map((lang) => (
-            <option key={lang} value={lang}>{lang}</option>
+            <option key={lang} value={lang}>
+              {lang}
+            </option>
           ))}
         </select>
 
@@ -339,8 +350,6 @@ useEffect(() => {
         </motion.button>
       </motion.div>
 
-
-
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Code Editor - 2/3 */}
@@ -354,7 +363,7 @@ useEffect(() => {
             value={code}
             height="400px"
             extensions={[languageExtensions[language]]}
-            theme={theme === 'dark' ? dracula : githubLight}
+            theme={theme === "dark" ? dracula : githubLight}
             onChange={(val) => {
               setCode(val);
               const roomId = `room-${labId}-${studentId}`;
@@ -372,7 +381,9 @@ useEffect(() => {
             transition={{ delay: 0.1 }}
             className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow"
           >
-            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Input</h3>
+            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
+              Input
+            </h3>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -389,8 +400,12 @@ useEffect(() => {
             transition={{ delay: 0.2 }}
             className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow"
           >
-            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Output</h3>
-            <div className="whitespace-pre-wrap text-gray-800 dark:text-white">{output}</div>
+            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
+              Output
+            </h3>
+            <div className="whitespace-pre-wrap text-gray-800 dark:text-white">
+              {output}
+            </div>
           </motion.div>
         </div>
       </div>

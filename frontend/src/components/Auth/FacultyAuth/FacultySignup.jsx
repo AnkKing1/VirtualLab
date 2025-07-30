@@ -43,7 +43,7 @@ const FacultySignup = () => {
     }
 
     try {
-      const response = await axios.post("api/v1/faculty/signup", {
+      const response = await axios.post("/api/v1/faculty/signup", {
         ...formData,
       });
       console.log(response);
@@ -62,7 +62,7 @@ const FacultySignup = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-24">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
@@ -71,68 +71,73 @@ const FacultySignup = () => {
         {/* Left Section */}
         <div className="md:w-1/2 bg-gradient-to-br from-purple-600 to-purple-500 text-white flex flex-col justify-center items-center p-10">
           <h1 className="text-4xl font-extrabold mb-4">Faculty Signup</h1>
-          <p className="text-lg text-center">Create an account to manage classes.</p>
+          <p className="text-lg text-center">
+            Create an account to manage classes.
+          </p>
         </div>
 
         {/* Right Section - Signup Form */}
         <div className="md:w-1/2 p-10 flex flex-col justify-center">
-          {error && (
-            <p className="text-red-600 text-center mb-4">{error}</p>
-          )}
+          {error && <p className="text-red-600 text-center mb-4">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-gray-700 mb-2">Full Name</label>
-              <input 
-                type="text" 
-                name="name" 
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                name="name"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                onChange={handleChange}
+                required
               />
             </div>
             <div>
               <label className="block text-gray-700 mb-2">Email</label>
-              <input 
-                type="email" 
-                name="email" 
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
-                onChange={handleChange} 
-                required 
+              <input
+                type="email"
+                name="email"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                onChange={handleChange}
+                required
               />
             </div>
             <div>
               <label className="block text-gray-700 mb-2">Department</label>
-              <input 
-                type="text" 
-                name="department" 
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                name="department"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                onChange={handleChange}
+                required
               />
             </div>
             <div>
               <label className="block text-gray-700 mb-2">Password</label>
-              <input 
-                type="password" 
-                name="password" 
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
-                onChange={handleChange} 
-                required 
+              <input
+                type="password"
+                name="password"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                onChange={handleChange}
+                required
               />
-              <PasswordStrengthIndicator password={formData.password} setStrength={setPasswordStrength} />
+              <PasswordStrengthIndicator
+                password={formData.password}
+                setStrength={setPasswordStrength}
+              />
             </div>
             <div>
-              <label className="block text-gray-700 mb-2">Confirm Password</label>
-              <input 
-                type="password" 
-                name="confirmPassword" 
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400" 
-                onChange={handleChange} 
-                required 
+              <label className="block text-gray-700 mb-2">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="confirmPassword"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                onChange={handleChange}
+                required
               />
             </div>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition-all"
             >
               Sign Up

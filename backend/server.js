@@ -2,15 +2,15 @@ import express from "express";
 import connectDB from "./config/connect.js";
 import cors from "cors";
 import dotenv from "dotenv";
-import { Server } from 'socket.io';
-import http from 'http';
+import { Server } from "socket.io";
+import http from "http";
 
 import facultyRouter from "./routes/facultyRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 import labRouter from "./routes/labRoutes.js";
 import studentRouter from "./routes/studentRoutes.js";
 import router from "./routes/codeExecutionRoutes.js";
-import { executeCode } from "./controllers/codeExecutionController.js"
+import { executeCode } from "./controllers/codeExecutionController.js";
 
 dotenv.config();
 connectDB();
@@ -20,13 +20,13 @@ const server = http.createServer(app); // ← Create HTTP server
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"]
-  }
+    origin: ["http://localhost:5173", "http://localhost:3000"],
+    methods: ["GET", "POST"],
+  },
 }); // ← Attach Socket.IO to that server
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173", "http://localhost:3000"],
   methods: "GET, POST, PUT, PATCH, HEAD",
   credentials: true,
 };
@@ -45,26 +45,27 @@ app.use("/api/v1/code", router);
 io.on("connection", (socket) => {
   console.log("🟢 A user connected:", socket.id);
 
+  // 1. Join a room: labId + studentId ensures unique room per enrolled student per lab
+  socket.on("join-room", ({ roomId }) => {
+    socket.join(roomId);
+    console.log(`✅ ${socket.id} joined room: ${roomId}`);
+  });
 
-    // 1. Join a room: labId + studentId ensures unique room per enrolled student per lab
-    socket.on("join-room", ({ roomId }) => {
-      socket.join(roomId);
-      console.log(`✅ ${socket.id} joined room: ${roomId}`);
-    });
-  
-    // 2. When code changes, broadcast to others in the same room
-    socket.on("code-change", ({ roomId, code }) => {
-      socket.to(roomId).emit("code-update", code);
-    });
-  
-
-
-
+  // 2. When code changes, broadcast to others in the same room
+  socket.on("code-change", ({ roomId, code }) => {
+    socket.to(roomId).emit("code-update", code);
+  });
 
   socket.on("execute-code", async (data) => {
     try {
       const { code, input, language, labId, studentId } = data;
-      const output = await executeCode({ code, input, language, labId, studentId });
+      const output = await executeCode({
+        code,
+        input,
+        language,
+        labId,
+        studentId,
+      });
       socket.emit("code-executed", { output });
     } catch (error) {
       socket.emit("execution-error", { error: error.message });

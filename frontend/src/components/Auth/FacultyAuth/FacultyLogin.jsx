@@ -11,7 +11,7 @@ const FacultyLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const {storeFacultyTokenInLS } = useAuth();
+  const { storeFacultyTokenInLS } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,11 +21,12 @@ const FacultyLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    
 
     try {
       setLoading(true);
-      const response = await axios.post("api/v1/faculty/login",{... formData});
+      const response = await axios.post("/api/v1/faculty/login", {
+        ...formData,
+      });
       console.log(response);
 
       setTimeout(() => {
@@ -36,20 +37,19 @@ const FacultyLogin = () => {
           navigate(`/faculty/dashboard/${facultyId}`);
         } else {
           setLoading(false);
-          setError(response.data.message||"Invalid email or password.");
+          setError(response.data.message || "Invalid email or password.");
         }
       }, 1000);
     } catch (err) {
       console.error(err);
       setLoading(false);
       setError(err.response?.data?.message || "Server error. Try again later.");
-      
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 to-white p-6">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
@@ -58,13 +58,15 @@ const FacultyLogin = () => {
         {/* Left Section */}
         <div className="md:w-1/2 bg-gradient-to-br from-purple-600 to-purple-400 text-white flex flex-col justify-center items-center p-10">
           <h1 className="text-4xl font-extrabold mb-4">Faculty Login</h1>
-          <p className="text-center text-lg font-light">Sign in to manage your classes and resources.</p>
+          <p className="text-center text-lg font-light">
+            Sign in to manage your classes and resources.
+          </p>
         </div>
 
         {/* Right Section - Login Form */}
         <div className="md:w-1/2 flex flex-col justify-center p-8 md:p-12">
           {error && (
-            <motion.p 
+            <motion.p
               initial={{ y: -10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               className="text-red-500 text-center mb-4"
@@ -104,7 +106,9 @@ const FacultyLogin = () => {
               type="submit"
               disabled={loading}
               className={`w-full bg-purple-600 text-white py-2 rounded-lg font-semibold transition-all ${
-                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-purple-700"
+                loading
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-purple-700"
               }`}
             >
               {loading ? "Logging in..." : "Login"}
@@ -112,14 +116,14 @@ const FacultyLogin = () => {
           </form>
 
           <div className="flex flex-col items-center mt-6 space-y-2">
-            <Link 
-              to="/forgot-password?userType=faculty" 
+            <Link
+              to="/forgot-password?userType=faculty"
               className="text-sm text-purple-600 hover:underline"
             >
               Forgot Password?
             </Link>
-            <Link 
-              to="/faculty-signup" 
+            <Link
+              to="/faculty-signup"
               className="text-sm text-purple-600 hover:underline"
             >
               Sign up as a faculty

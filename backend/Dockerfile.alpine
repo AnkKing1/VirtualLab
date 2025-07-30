@@ -1,0 +1,37 @@
+# Alternative lightweight Dockerfile using Alpine
+FROM node:18-alpine
+
+# Install essential build tools and compilers for Alpine
+RUN apk update && apk add --no-cache \
+    build-base \
+    g++ \
+    gcc \
+    python3 \
+    py3-pip \
+    openjdk17 \
+    curl \
+    git \
+    ruby \
+    go \
+    bash \
+    && rm -rf /var/cache/apk/*
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Install any needed Node.js packages
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Set up the app in the working directory
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 5000
+
+# Copy and make run script executable
+COPY run.sh /app/run.sh
+RUN chmod +x /app/run.sh
+
+# Default command when the container starts
+CMD ["npm", "start"]
